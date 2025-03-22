@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerTempoContoller : MonoBehaviour
 {
     public TempoBarManager TempoBarManager;
-    //public Transform failZone;
+
     public Transform targetZone;
     public AudioSource AudioSource;
 
@@ -14,19 +14,22 @@ public class PlayerTempoContoller : MonoBehaviour
     public float changePitchInterval;
 
     private float secondsPerBeat;
-    private float songStartTime;
     private float nextChangeTime;
 
     public float minBPM = 80f;
     public float maxBPM = 160f;
+
+    private ScreenShake negativeVisFeedback;
+    public GameObject negativeVisSprite;
 
 
     private void Start()
     {
         bpm = 130f;
         secondsPerBeat = 60f / bpm;
-        songStartTime = Time.time;
         nextChangeTime = Time.time + changePitchInterval;
+        negativeVisFeedback = GetComponent<ScreenShake>();
+        negativeVisSprite.SetActive(false);
     }
 
     private void Update()
@@ -63,12 +66,14 @@ public class PlayerTempoContoller : MonoBehaviour
 
     void ChangeTempoAndTarget()
     {
-        bpm = Mathf.Round(Random.Range(minBPM, maxBPM)); 
-        AudioSource.pitch = bpm / 120f; 
+        bpm = Mathf.Round(Random.Range(minBPM, maxBPM) / 10) * 10;
+
+        AudioSource.pitch = bpm / 120f;
         UpdateBeatTiming();
 
         Vector3 newTargetPos = new Vector3(Random.Range(-2f, 2f), targetZone.position.y, targetZone.position.z);
         StartCoroutine(SmoothMoveTarget(newTargetPos, 0.5f));
+
     }
 
 
@@ -92,6 +97,9 @@ public class PlayerTempoContoller : MonoBehaviour
         else
         {
             Debug.Log("false");
+            StartCoroutine(FlashRed());
+            negativeVisFeedback.ShakeCamera();
+
             //something can happen here
 
             //
@@ -99,6 +107,14 @@ public class PlayerTempoContoller : MonoBehaviour
 
             return false;
         }
+    }
+
+
+    IEnumerator FlashRed()
+    {
+        negativeVisSprite.SetActive(true);
+        yield return new WaitForSeconds(0.2f);
+        negativeVisSprite.SetActive(false);
     }
 
     void UpdateBeatTiming()
