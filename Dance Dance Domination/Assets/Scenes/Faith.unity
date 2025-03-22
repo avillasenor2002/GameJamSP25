@@ -340,7 +340,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -439,7 +439,7 @@ MonoBehaviour:
   AudioSource: {fileID: 1439075976}
   bpm: 130
   beatThreshold: 1.5
-  changePitchInterval: 0
+  changePitchInterval: 10
   minBPM: 80
   maxBPM: 160
 --- !u!1 &1631130117
@@ -598,11 +598,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TempoZone: {fileID: 1176125314}
-  moveSpeed: -1
+  moveSpeed: -0.5
   successMoveSpeed: 2
   failMoveSpeed: -2
   minX: -3.17
   maxX: 3.17
+  maxSpeed: 2
 --- !u!1001 &3383163802823645829
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -26,6 +26,7 @@ public class PlayerTempoContoller : MonoBehaviour
         bpm = 130f;
         secondsPerBeat = 60f / bpm;
         songStartTime = Time.time;
+        nextChangeTime = Time.time + changePitchInterval;
     }
 
     private void Update()
@@ -34,7 +35,7 @@ public class PlayerTempoContoller : MonoBehaviour
         if (Time.time >= nextChangeTime)
         {
             ChangeTempoAndTarget(); 
-            nextChangeTime = Time.time + changePitchInterval;
+            nextChangeTime += changePitchInterval;
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -44,6 +45,22 @@ public class PlayerTempoContoller : MonoBehaviour
         }
     }
 
+
+    IEnumerator SmoothMoveTarget(Vector3 newTargetPos, float duration)
+    {
+        Vector3 startPos = targetZone.position;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            targetZone.position = Vector3.Lerp(startPos, newTargetPos, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        targetZone.position = newTargetPos;
+    }
+
     void ChangeTempoAndTarget()
     {
         bpm = Random.Range(minBPM, maxBPM); 
@@ -51,7 +68,7 @@ public class PlayerTempoContoller : MonoBehaviour
         UpdateBeatTiming();
 
         Vector3 newTargetPos = new Vector3(Random.Range(-2f, 2f), targetZone.position.y, targetZone.position.z);
-        targetZone.position = newTargetPos;
+        StartCoroutine(SmoothMoveTarget(newTargetPos, 0.5f));
 
         Debug.Log($" 새 BPM: {bpm}, 목표 영역 이동: {targetZone.position}");
     }
@@ -61,7 +78,7 @@ public class PlayerTempoContoller : MonoBehaviour
     {
         //see howmuch time passed
         float songTime = Time.time - songStartTime;
-        float nearestBeatTime = Mathf.Round(songTime / secondsPerBeat) * secondsPerBeat;
+        float nearestBeatTime = Mathf.Floor(songTime / secondsPerBeat) * secondsPerBeat;
         float difference = Mathf.Abs(songTime - nearestBeatTime);
 
 
@@ -80,7 +97,6 @@ public class PlayerTempoContoller : MonoBehaviour
     void UpdateBeatTiming()
     {
         secondsPerBeat = 60f / bpm; 
-        songStartTime = Time.time;
     }
 
 }

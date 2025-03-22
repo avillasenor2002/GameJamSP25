@@ -16,6 +16,8 @@ public class TempoBarManager : MonoBehaviour
     public float minX;
     public float maxX;
 
+    public float maxSpeed;
+
     private float velocity = 0f;
 
     private void Awake()
@@ -26,7 +28,7 @@ public class TempoBarManager : MonoBehaviour
         }
         else
         {
-            Destroy(instance);
+            Destroy(gameObject);
         }
 
     }
@@ -40,10 +42,12 @@ public class TempoBarManager : MonoBehaviour
 
     void HandleMovement()
     {
-        velocity -= moveSpeed * Time.deltaTime;
 
         transform.position += new Vector3(velocity * Time.deltaTime, 0, 0);
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, minX, maxX), transform.position.y, transform.position.z);
+
+        velocity = Mathf.Lerp(velocity, 0, Time.deltaTime * 2f);
+
     }
 
  
@@ -51,12 +55,13 @@ public class TempoBarManager : MonoBehaviour
     {
         if (isSuccess)
         {
-            velocity = successMoveSpeed; //If Success, it leads to the thing
+            velocity += successMoveSpeed; //If Success, it leads to the thing
         }
         else
         {
-            velocity = failMoveSpeed; //If Fails, it moves away
+            velocity += failMoveSpeed; //If Fails, it moves away
         }
+        velocity = Mathf.Clamp(velocity, -maxSpeed, maxSpeed);
     }
 
 }
