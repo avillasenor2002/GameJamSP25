@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -6,11 +6,10 @@ using UnityEngine.Tilemaps;
 public class PlayerMovement : MonoBehaviour
 {
     public Tilemap tilemap;
-    public TilemapDataAssigner tileDataAssigner; // Reference to the TilemapDataAssigner
-    public List<int> walkableTileIDs;            // Walkable tile types (numeric IDs)
-    public float moveSpeed = 5f;                 // Movement speed
+    public TilemapDataAssigner tileDataAssigner;
+    public List<int> walkableTileIDs;
+    public float moveSpeed = 5f;
 
-    // Static flag to indicate a group move in progress.
     public static bool GroupIsMoving = false;
 
     private Vector3Int currentGridPosition;
@@ -30,12 +29,14 @@ public class PlayerMovement : MonoBehaviour
         {
             HandleInput();
         }
+
         MovePlayer();
     }
 
     void HandleInput()
     {
         Vector3Int direction = Vector3Int.zero;
+
         if (Input.GetKeyDown(KeyCode.W)) direction = Vector3Int.up;
         else if (Input.GetKeyDown(KeyCode.S)) direction = Vector3Int.down;
         else if (Input.GetKeyDown(KeyCode.A)) direction = Vector3Int.left;
@@ -45,8 +46,9 @@ public class PlayerMovement : MonoBehaviour
         {
             Vector3Int potentialPosition = currentGridPosition + direction;
 
-            // Activate any NPC on the target tile.
             HumanNPC[] npcs = FindObjectsOfType<HumanNPC>();
+
+            // Activate any NPC in the target tile
             foreach (HumanNPC npc in npcs)
             {
                 if (npc.NPCGetCurrentGridPosition() == potentialPosition)
@@ -55,15 +57,34 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
 
-            // Check if movement is allowed.
-            if (IsTileWalkable(potentialPosition) && !IsTileOccupied(potentialPosition))
+            // ✅ Traverse through NPCs in a line to see if movement is possible
+            Vector3Int checkPosition = potentialPosition;
+            while (true)
             {
-                // Begin group movement.
-                GroupIsMoving = true;
-                targetGridPosition = potentialPosition;
-                isMoving = true;
+                HumanNPC npcAtPosition = GetNPCAtPosition(checkPosition);
+                if (npcAtPosition != null)
+                {
+                    npcAtPosition.ActivateObject(); // Activate if inactive
 
-                // Instruct all active NPCs to follow with the same offset.
+                    Vector3Int nextCheck = checkPosition + direction;
+                    if (!npcAtPosition.CanMoveTo(nextCheck))
+                    {
+                        Debug.Log("Player blocked by NPC chain (wall or unmovable).");
+                        return;
+                    }
+
+                    checkPosition = nextCheck;
+                }
+                else break; // No more NPCs in the chain
+            }
+
+            // Final check: is initial tile walkable
+            if (IsTileWalkable(potentialPosition))
+            {
+                GroupIsMoving = true;
+                isMoving = true;
+                targetGridPosition = potentialPosition;
+
                 foreach (HumanNPC npc in npcs)
                 {
                     if (npc.isActive)
@@ -71,39 +92,19 @@ public class PlayerMovement : MonoBehaviour
                         npc.FollowMove(direction);
                     }
                 }
-            }
-            else
-            {
-                Debug.Log($"Cannot move to {potentialPosition}: Tile is not walkable or is occupied.");
-            }
-        }
-    }
 
-    bool IsTileOccupied(Vector3Int gridPosition)
-    {
-        // During a group move, ignore occupancy by group members.
-        if (GroupIsMoving)
-            return false;
-
-        // Otherwise, check all NPCs and players.
-        HumanNPC[] npcs = FindObjectsOfType<HumanNPC>();
-        foreach (HumanNPC npc in npcs)
-        {
-            if (npc.GetCurrentGridPosition() == gridPosition)
-            {
-                // Block if NPC is not active (i.e. not in the group).
-                if (!npc.isActive)
-                    return true;
+                foreach (HumanNPC npc in npcs)
+                {
+                    if (npc.isActive && npc.WillBlockTile(currentGridPosition))
+                    {
+                        isMoving = false;
+                        GroupIsMoving = false;
+                        Debug.Log("Player blocked by NPC who cannot move.");
+                        return;
+                    }
+                }
             }
         }
-
-        PlayerMovement[] players = FindObjectsOfType<PlayerMovement>();
-        foreach (PlayerMovement player in players)
-        {
-            if (player != this && player.GetCurrentGridPosition() == gridPosition)
-                return true;
-        }
-        return false;
     }
 
     void MovePlayer()
@@ -112,12 +113,12 @@ public class PlayerMovement : MonoBehaviour
         {
             Vector3 targetWorldPos = tilemap.CellToWorld(targetGridPosition) + tilemap.cellSize / 2f;
             transform.position = Vector3.MoveTowards(transform.position, targetWorldPos, moveSpeed * Time.deltaTime);
+
             if (Vector3.Distance(transform.position, targetWorldPos) < 0.01f)
             {
                 CenterOnTile(targetGridPosition);
                 currentGridPosition = targetGridPosition;
                 isMoving = false;
-                // When the player finishes moving, end the group move.
                 GroupIsMoving = false;
             }
         }
@@ -125,34 +126,31 @@ public class PlayerMovement : MonoBehaviour
 
     bool IsTileWalkable(Vector3Int gridPosition)
     {
-        if (tileDataAssigner == null || tileDataAssigner.tileDataGrid == null)
-        {
-            Debug.LogError("TileDataAssigner is not properly set!");
-            return false;
-        }
+        if (tileDataAssigner == null || tileDataAssigner.tileDataGrid == null) return false;
+
         int x = gridPosition.x - tilemap.cellBounds.xMin;
         int y = gridPosition.y - tilemap.cellBounds.yMin;
-        if (x < 0 || x >= tileDataAssigner.gridWidth || y < 0 || y >= tileDataAssigner.gridHeight)
-        {
-            Debug.Log($"Out of bounds: {gridPosition}");
-            return false;
-        }
+        if (x < 0 || x >= tileDataAssigner.gridWidth || y < 0 || y >= tileDataAssigner.gridHeight) return false;
+
         int tileID = tileDataAssigner.tileDataGrid[x, y].tileType;
-        bool canMove = walkableTileIDs.Contains(tileID);
-        Debug.Log($"Checking tile at [{x}, {y}] - TileID: {tileID} - Walkable: {canMove}");
-        return canMove;
+        return walkableTileIDs.Contains(tileID);
     }
 
-    public Vector3Int GetCurrentGridPosition()
+    HumanNPC GetNPCAtPosition(Vector3Int position)
     {
-        return currentGridPosition;
+        HumanNPC[] npcs = FindObjectsOfType<HumanNPC>();
+        foreach (HumanNPC npc in npcs)
+        {
+            if (npc.NPCGetCurrentGridPosition() == position)
+            {
+                return npc;
+            }
+        }
+        return null;
     }
 
-    // Public property so others (like NPCs) can check if the player is moving.
-    public bool IsMovingStatus
-    {
-        get { return isMoving; }
-    }
+    public Vector3Int GetCurrentGridPosition() => currentGridPosition;
+    public bool IsMovingStatus => isMoving;
 
     void CenterOnTile(Vector3Int gridPosition)
     {
