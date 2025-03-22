@@ -8,12 +8,11 @@ public class ScreenShake : MonoBehaviour
     [SerializeField] private float shakeIntensity = 0.5f;
     [SerializeField] private float shakeDuration = 0.5f;
 
-    //private CameraFollow2D cameraFollow;
+
 
     void Start()
     {
-        originalPosition = transform.position;
-        //cameraFollow = GetComponent<CameraFollow2D>();  // Get the CameraFollow2D script
+        originalPosition = transform.position;    
     }
 
     public void ShakeCamera()

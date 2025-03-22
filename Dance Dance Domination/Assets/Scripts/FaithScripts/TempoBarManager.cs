@@ -4,11 +4,8 @@ using UnityEngine;
 
 public class TempoBarManager : MonoBehaviour
 {
-    public static TempoBarManager instance;
-
     //Where the changing area (red block) is
     public Transform TempoZone;
-
 
     public float moveSpeed; //Default (negative value, gets away from the zone by default)
     public float successMoveSpeed; //When got it right
@@ -20,17 +17,13 @@ public class TempoBarManager : MonoBehaviour
 
     private float velocity = 0f;
 
-    private void Awake()
-    {
-        if(instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+    public float missTime = 1.0f;
+    private float lastInputTime;
 
+
+    private void Start()
+    {
+        lastInputTime = Time.time;
     }
 
     // Update is called once per frame
@@ -42,6 +35,17 @@ public class TempoBarManager : MonoBehaviour
         {
             MoveAwayFromTempoZone();
         }
+        else
+        {
+            lastInputTime = Time.time;
+        }
+
+        if(Time.time - lastInputTime >= missTime)
+        {
+            lastInputTime = Time.time;
+            OnHit(false);
+        }
+
 
     }
 
@@ -62,11 +66,11 @@ public class TempoBarManager : MonoBehaviour
 
         if (IsInsideTempoZone())
         {
-            velocity += moveSpeed * direction * 2f * Time.deltaTime;
+            velocity += moveSpeed * direction * 3f * Time.deltaTime;
         }
         else
         {
-            velocity += moveSpeed * direction * Time.deltaTime; 
+            velocity += moveSpeed * direction * 1.5f * Time.deltaTime; 
         }
 
         velocity = Mathf.Clamp(velocity, -maxSpeed, maxSpeed);
