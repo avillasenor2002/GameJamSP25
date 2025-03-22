@@ -7,7 +7,7 @@ public class TitleSceneLoader : MonoBehaviour
 {
     private void OnEnable()
     {
-        SceneManager.LoadScene("TitleScene", LoadSceneMode.Single);
+        SceneManager.LoadScene("TitleScreen", LoadSceneMode.Single);
     }
 
 }

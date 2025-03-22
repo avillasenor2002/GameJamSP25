@@ -83,11 +83,20 @@ public class PlayerTempoContoller : MonoBehaviour
         if (difference <= beatThreshold)
         {
             Debug.Log("true");
+            //something can happen here
+
+            //
+
             return true;
         }
         else
         {
             Debug.Log("false");
+            //something can happen here
+
+            //
+
+
             return false;
         }
     }

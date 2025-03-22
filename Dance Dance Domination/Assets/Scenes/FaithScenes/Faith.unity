@@ -434,7 +434,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6984500050686601131, guid: e82f99171f9a95245b8026287bd46981, type: 3}
       propertyPath: beatThreshold
-      value: 0.5
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 8101635274310710928, guid: e82f99171f9a95245b8026287bd46981, type: 3}
       propertyPath: m_Name
