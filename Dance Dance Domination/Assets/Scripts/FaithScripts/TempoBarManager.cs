@@ -37,6 +37,12 @@ public class TempoBarManager : MonoBehaviour
     void Update()
     {
         HandleMovement();
+
+        if (!Input.GetKey(KeyCode.Space))
+        {
+            MoveAwayFromTempoZone();
+        }
+
     }
 
 
@@ -46,20 +52,29 @@ public class TempoBarManager : MonoBehaviour
         transform.position += new Vector3(velocity * Time.deltaTime, 0, 0);
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, minX, maxX), transform.position.y, transform.position.z);
 
-        velocity = Mathf.Lerp(velocity, 0, Time.deltaTime * 2f);
+        velocity = Mathf.Lerp(velocity, 0, Time.deltaTime * 1.5f);
 
     }
 
- 
+    void MoveAwayFromTempoZone()
+    {
+        float direction = Mathf.Sign(transform.position.x - TempoZone.position.x); 
+        velocity += moveSpeed * direction * Time.deltaTime;
+        velocity = Mathf.Clamp(velocity, -maxSpeed, maxSpeed); 
+    }
+
+
     public void OnHit(bool isSuccess)
     {
+        float direction = Mathf.Sign(TempoZone.position.x - transform.position.x); 
+
         if (isSuccess)
         {
-            velocity += successMoveSpeed; //If Success, it leads to the thing
+            velocity += successMoveSpeed * direction; //If Success, it leads to the thing
         }
         else
         {
-            velocity += failMoveSpeed; //If Fails, it moves away
+            velocity += failMoveSpeed * -direction; //If Fails, it moves away
         }
         velocity = Mathf.Clamp(velocity, -maxSpeed, maxSpeed);
     }
