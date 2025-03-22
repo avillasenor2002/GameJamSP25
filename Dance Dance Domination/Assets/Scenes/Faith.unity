@@ -434,8 +434,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e10c705b2431c845b2d1373abe687b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TempoBarManager: {fileID: 0}
-  failZone: {fileID: 0}
+  TempoBarManager: {fileID: 1175911014063092959}
   targetZone: {fileID: 1176125314}
   AudioSource: {fileID: 1439075976}
   bpm: 130
@@ -559,6 +558,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1724083500963141803, guid: e82f99171f9a95245b8026287bd46981, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8101635274310710928, guid: e82f99171f9a95245b8026287bd46981, type: 3}
       propertyPath: m_Name
       value: TempoBar
@@ -573,7 +576,33 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8101635274310710928, guid: e82f99171f9a95245b8026287bd46981, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1439075976}
+    - targetCorrespondingSourceObject: {fileID: 6576577106685393670, guid: e82f99171f9a95245b8026287bd46981, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1175911014063092959}
   m_SourcePrefab: {fileID: 100100000, guid: e82f99171f9a95245b8026287bd46981, type: 3}
+--- !u!1 &1175911014063092958 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6576577106685393670, guid: e82f99171f9a95245b8026287bd46981, type: 3}
+  m_PrefabInstance: {fileID: 1175911014063092957}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1175911014063092959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1175911014063092958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d900d957a07bfa44f85d5908cba12070, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TempoZone: {fileID: 1176125314}
+  moveSpeed: -1
+  successMoveSpeed: 2
+  failMoveSpeed: -2
+  minX: -3.17
+  maxX: 3.17
 --- !u!1001 &3383163802823645829
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -623,12 +652,24 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1927416441953061663, guid: 847b2aca16e6a214995c017cec502111, type: 3}
+      propertyPath: Loop
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1927416441953061663, guid: 847b2aca16e6a214995c017cec502111, type: 3}
+      propertyPath: m_Volume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1927416441953061663, guid: 847b2aca16e6a214995c017cec502111, type: 3}
       propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: 32947f82c1a203d4b907c61aad282083, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 7536951872679363960, guid: 847b2aca16e6a214995c017cec502111, type: 3}
       propertyPath: bpm
       value: 130
+      objectReference: {fileID: 0}
+    - target: {fileID: 7536951872679363960, guid: 847b2aca16e6a214995c017cec502111, type: 3}
+      propertyPath: audioSource
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7536951872679363960, guid: 847b2aca16e6a214995c017cec502111, type: 3}
       propertyPath: midThreshold
@@ -642,7 +683,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: RhythmManager
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1927416441953061663, guid: 847b2aca16e6a214995c017cec502111, type: 3}
+    - {fileID: 7536951872679363960, guid: 847b2aca16e6a214995c017cec502111, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
