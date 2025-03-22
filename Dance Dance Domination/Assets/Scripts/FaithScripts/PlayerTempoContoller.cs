@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerTempoContoller : MonoBehaviour
 {
     public TempoBarManager TempoBarManager;
-    public Transform failZone;
+    //public Transform failZone;
     public Transform targetZone;
     public AudioSource AudioSource;
 
