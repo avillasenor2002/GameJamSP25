@@ -63,21 +63,19 @@ public class PlayerTempoContoller : MonoBehaviour
 
     void ChangeTempoAndTarget()
     {
-        bpm = Random.Range(minBPM, maxBPM); 
+        bpm = Mathf.Round(Random.Range(minBPM, maxBPM)); 
         AudioSource.pitch = bpm / 120f; 
         UpdateBeatTiming();
 
         Vector3 newTargetPos = new Vector3(Random.Range(-2f, 2f), targetZone.position.y, targetZone.position.z);
         StartCoroutine(SmoothMoveTarget(newTargetPos, 0.5f));
-
-        Debug.Log($" 새 BPM: {bpm}, 목표 영역 이동: {targetZone.position}");
     }
 
 
     bool CheckHitTiming()
     {
         //see howmuch time passed
-        float songTime = Time.time - songStartTime;
+        float songTime = AudioSource.time;
         float nearestBeatTime = Mathf.Floor(songTime / secondsPerBeat) * secondsPerBeat;
         float difference = Mathf.Abs(songTime - nearestBeatTime);
 

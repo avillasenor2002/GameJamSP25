@@ -59,8 +59,25 @@ public class TempoBarManager : MonoBehaviour
     void MoveAwayFromTempoZone()
     {
         float direction = Mathf.Sign(transform.position.x - TempoZone.position.x); 
-        velocity += moveSpeed * direction * Time.deltaTime;
-        velocity = Mathf.Clamp(velocity, -maxSpeed, maxSpeed); 
+
+        if (IsInsideTempoZone())
+        {
+            velocity += moveSpeed * direction * 2f * Time.deltaTime;
+        }
+        else
+        {
+            velocity += moveSpeed * direction * Time.deltaTime; 
+        }
+
+        velocity = Mathf.Clamp(velocity, -maxSpeed, maxSpeed);
+    }
+
+    bool IsInsideTempoZone()
+    {
+        float zoneLeft = TempoZone.position.x - (TempoZone.localScale.x / 2);
+        float zoneRight = TempoZone.position.x + (TempoZone.localScale.x / 2);
+
+        return transform.position.x >= zoneLeft && transform.position.x <= zoneRight;
     }
 
 
@@ -74,7 +91,7 @@ public class TempoBarManager : MonoBehaviour
         }
         else
         {
-            velocity += failMoveSpeed * -direction; //If Fails, it moves away
+            velocity += failMoveSpeed * 2;
         }
         velocity = Mathf.Clamp(velocity, -maxSpeed, maxSpeed);
     }
