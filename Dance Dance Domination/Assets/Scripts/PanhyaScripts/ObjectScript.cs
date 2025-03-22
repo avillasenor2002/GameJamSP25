@@ -6,10 +6,12 @@ public class ObjectScript : MonoBehaviour
 {
     public bool isPlayer;
     public bool collide;
+    public PlayerTrackerScript pscript;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        pscript = FindObjectOfType<PlayerTrackerScript>();
     }
 
     // Update is called once per frame
@@ -19,6 +21,11 @@ public class ObjectScript : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D other)
     {
-        collide = true;
+        if (tag == "human")
+        {
+            transform.gameObject.tag = "alien";
+            pscript.check();
+        }
+        
     }
 }
