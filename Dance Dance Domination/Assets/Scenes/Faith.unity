@@ -438,7 +438,7 @@ MonoBehaviour:
   targetZone: {fileID: 1176125314}
   AudioSource: {fileID: 1439075976}
   bpm: 130
-  beatThreshold: 1.5
+  beatThreshold: 0.5
   changePitchInterval: 10
   minBPM: 80
   maxBPM: 160
