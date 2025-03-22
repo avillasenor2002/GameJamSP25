@@ -16,8 +16,7 @@ public class PlayerTrackerScript : MonoBehaviour
     void Start()
     {
 
-        npcs = GameObject.FindGameObjectsWithTag("human");
-        player = GameObject.FindGameObjectsWithTag("alien");
+        
 
         check();
     }

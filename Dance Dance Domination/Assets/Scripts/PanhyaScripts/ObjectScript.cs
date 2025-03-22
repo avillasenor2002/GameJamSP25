@@ -5,7 +5,7 @@ using UnityEngine;
 public class ObjectScript : MonoBehaviour
 {
     public bool isPlayer;
-    public bool collide;
+    
     public PlayerTrackerScript pscript;
 
     // Start is called before the first frame update
@@ -19,6 +19,8 @@ public class ObjectScript : MonoBehaviour
     {
         
     }
+
+    //collision is how i tested state changing and the counter updating
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (tag == "human")

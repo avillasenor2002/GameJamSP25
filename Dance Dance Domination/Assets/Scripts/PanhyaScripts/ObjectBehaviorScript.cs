@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ObjectBehaviorScript : MonoBehaviour
 {
+    //this script does not do anything lol
     public ObjectScript script;
     public PlayerTrackerScript pscript;
     // Start is called before the first frame update
