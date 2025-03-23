@@ -18,11 +18,14 @@ public class TimedHazardSpawner : MonoBehaviour
     public int maxHazardsPerWave = 1;
     private bool stopSpawning = false;
 
+    [Header("Audio")]
+    public AudioClip warningBeep;
+    public AudioSource audioSource;
+
     public void StopSpawning()
     {
         stopSpawning = true;
     }
-
 
     private void Start()
     {
@@ -41,7 +44,11 @@ public class TimedHazardSpawner : MonoBehaviour
                 Vector3 worldPos = tilemap.GetCellCenterWorld(spawnPos);
 
                 GameObject warning = Instantiate(warningIndicatorPrefab, worldPos, Quaternion.identity);
-                StartCoroutine(FlashWarning(warning.GetComponent<SpriteRenderer>(), warningDuration));
+                HazardIndicatorBlinker blinker = warning.GetComponent<HazardIndicatorBlinker>();
+                if (blinker != null)
+                {
+                    blinker.InitializeBlink(warningDuration, audioSource, warningBeep);
+                }
 
                 StartCoroutine(SpawnHazardAfterDelay(worldPos, warningDuration, warning));
             }
@@ -62,8 +69,6 @@ public class TimedHazardSpawner : MonoBehaviour
         GameObject hazard = Instantiate(timedHazardPrefab, worldPos, Quaternion.identity);
         Destroy(hazard, hazardLifetime);
     }
-
-
 
     Vector3Int GetValidSpawnTile()
     {
@@ -95,18 +100,4 @@ public class TimedHazardSpawner : MonoBehaviour
 
         return false;
     }
-
-    IEnumerator FlashWarning(SpriteRenderer sprite, float duration)
-    {
-        float t = 0f;
-        while (t < duration)
-        {
-            sprite.enabled = !sprite.enabled;
-            yield return new WaitForSeconds(0.15f);
-            t += 0.15f;
-        }
-        sprite.enabled = true;
-    }
-
-
 }
