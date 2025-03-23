@@ -28,6 +28,11 @@ public class TempoBarManager : MonoBehaviour
 
     Bounds bounds;
 
+    private float bpm = 120f;
+    private float beatTimer = 0f;
+    private float beatInterval => 60f / bpm;
+    private float lastBeatTime;
+
     private void Start()
     {
         BoxCollider2D grayCollider = gray.GetComponent<BoxCollider2D>();
@@ -44,6 +49,15 @@ public class TempoBarManager : MonoBehaviour
     void Update()
     {
         HandleMovement();
+
+        HandleMovement();
+
+        beatTimer += Time.deltaTime;
+        if (beatTimer >= beatInterval)
+        {
+            beatTimer -= beatInterval;
+            TriggerGlobalBeat(); // NEW
+        }
 
         if (!Input.GetKeyDown(KeyCode.Space))
         {
@@ -68,6 +82,14 @@ public class TempoBarManager : MonoBehaviour
         }
     }
 
+    void TriggerGlobalBeat()
+    {
+        SquishVisualEffect[] squishers = FindObjectsOfType<SquishVisualEffect>();
+        foreach (SquishVisualEffect squish in squishers)
+        {
+            squish.OnBeat();
+        }
+    }
 
     void HandleMovement()
     {
