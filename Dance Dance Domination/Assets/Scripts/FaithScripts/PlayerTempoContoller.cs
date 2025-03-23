@@ -13,7 +13,15 @@ public class PlayerTempoContoller : MonoBehaviour
     public float beatThreshold;
     public float changePitchInterval;
 
-    private float secondsPerBeat;
+    //so this will be what you'll take!
+    //player tempo controller
+    public float secondsPerBeat;
+    
+    //public PlayerTempoController globalBeat;
+    //globalBeat = GetComponentInParents<PlayerTempoController>();
+    //globalBeat.secondsPerBeat << This will tell the beat;
+
+
     private float nextChangeTime;
 
     public float minBPM = 80f;
