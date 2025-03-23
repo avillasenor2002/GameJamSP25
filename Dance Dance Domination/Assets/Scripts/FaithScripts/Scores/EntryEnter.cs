@@ -11,6 +11,7 @@ public class EntryEnter : MonoBehaviour
     public Transform scoreEntryParent;
     public GameObject scoreEntryPrefab;
     public GameObject scoreboardContainer;
+    public GameObject justRandomBlackTransparentBackground;
 
     private void Start()
     {
@@ -34,6 +35,7 @@ public class EntryEnter : MonoBehaviour
 
         playerNameInput.gameObject.SetActive(false);
         submitScoreButton.gameObject.SetActive(false);
+        justRandomBlackTransparentBackground.gameObject.SetActive(false);
     }
     private void UpdateScoreboard()
     {
@@ -57,6 +59,7 @@ public class EntryEnter : MonoBehaviour
     {
         playerNameInput.gameObject.SetActive(true);
         submitScoreButton.gameObject.SetActive(true);
+        justRandomBlackTransparentBackground.gameObject.SetActive(true);
     }
 
 }

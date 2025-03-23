@@ -19,6 +19,11 @@ public class SceneSequencing : MonoBehaviour
         }
     }
 
+    public void OnPressLoadTitleScene()
+    {
+        SceneManager.LoadScene("TitleScreen");
+    }
+
     //From Title Scene to main game
     public void OnPressLoadMainGame()
     {
@@ -31,4 +36,12 @@ public class SceneSequencing : MonoBehaviour
     {
         SceneManager.LoadScene("EndScene");
     }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
+
+
 }
