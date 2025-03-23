@@ -100,13 +100,11 @@ public class PlayerTempoContoller : MonoBehaviour
 
         if (difference <= beatThreshold)
         {
-            Debug.Log("true");
             //StartCoroutine(FlashGreen());
             return true;
         }
         else
         {
-            Debug.Log("false");
             StartCoroutine(FlashRed());
             negativeVisFeedback.ShakeCamera();
             return false;

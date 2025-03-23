@@ -24,7 +24,7 @@ public class TempoBarManager : MonoBehaviour
     public float secondsPlayerWasOut = 4.0f;
 
     public GameObject gray;
-
+    private float lastNPCKillTime = 0f;
 
     private void Start()
     {
@@ -52,10 +52,17 @@ public class TempoBarManager : MonoBehaviour
             lastInputTime = Time.time;
         }
 
-        if(Time.time - lastInputTime >= missTime)
+        if (Time.time - lastInputTime >= missTime)
         {
             lastInputTime = Time.time;
             OnHit(false);
+
+
+        }
+        if (isOutforLong() && Time.time - lastNPCKillTime >= secondsPlayerWasOut)
+        {
+            HumanNPC_FH.RemoveLastNPC();
+            lastNPCKillTime = Time.time; 
         }
     }
 
@@ -68,13 +75,11 @@ public class TempoBarManager : MonoBehaviour
         transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
 
         velocity = Mathf.Lerp(velocity, 0, Time.deltaTime * 1.5f);
-        //Debug.Log($"[HandleMovement] 위치: {transform.position.x}, 속도: {velocity}");
     }
 
     void MoveAwayFromTempoZone()
     {
         float distance = transform.position.x - tempoZone.transform.position.x;
-        Debug.Log($"[MoveAwayFromTempoZone] distance: {distance}, 현재 위치: {transform.position.x}, tempoZone 위치(월드): {tempoZone.transform.position.x}");
         float direction = Mathf.Sign(distance); 
 
         if (IsInsideTempoZone())
@@ -97,26 +102,41 @@ public class TempoBarManager : MonoBehaviour
     //I placed this in the Updates so that it goes along with the real-time.
     //isOutforLong will be true if the player is out of the redzone of the bar for certain amount of seconds.
     //once player is back into the zone, then the time will become = 0 (reset), function will return 0.
-    
-    // usage: if(TempoBarManager.isOutforLong()) { //Add penalty here }
+
+    // usage: if(isOutforLong()) { //Add penalty here }
     public bool isOutforLong()
     {
         if (!IsInsideTempoZone())
         {
             timeAwayFromZone += Time.deltaTime;
 
+
             if (timeAwayFromZone >= secondsPlayerWasOut)
             {
+                
                 return true;
             }
         }
         else
         {
-            timeAwayFromZone = 0;
+            if (timeAwayFromZone > 0f)
+            {
+                timeAwayFromZone = 0;
+
+            }
         }
         return false;
     }
+    bool IsFarFromTempoZone()
+    {
+        float buffer = 0.1f;
+        Bounds bounds = tempoZone.GetComponent<BoxCollider2D>().bounds;
 
+        float left = bounds.min.x - buffer;
+        float right = bounds.max.x + buffer;
+
+        return transform.position.x < left || transform.position.x > right;
+    }
 
     public void OnHit(bool isSuccess)
     {
@@ -131,7 +151,6 @@ public class TempoBarManager : MonoBehaviour
             velocity += failMoveSpeed * 2;
         }
         velocity = Mathf.Clamp(velocity, -maxSpeed, maxSpeed);
-        Debug.Log($"[OnHit] velocity: {velocity}, 위치: {transform.position}");
     }
 
 }
