@@ -15,6 +15,10 @@ public class HumanNPC : MonoBehaviour
     private Vector3Int targetGridPosition;
     private bool isMoving;
 
+    //Faith Addition
+    public static List<HumanNPC> activeNPCs;
+
+
     void Start()
     {
         // Find Tilemap if not assigned
@@ -39,6 +43,12 @@ public class HumanNPC : MonoBehaviour
             }
         }
 
+        if (activeNPCs == null)
+        {
+            activeNPCs = new List<HumanNPC>();
+        }
+
+
         currentGridPosition = tilemap.WorldToCell(transform.position);
         CenterOnTile(currentGridPosition);
         targetGridPosition = currentGridPosition;
@@ -57,16 +67,31 @@ public class HumanNPC : MonoBehaviour
         if (!isActive)
         {
             isActive = true;
+            if (!activeNPCs.Contains(this))
+            {
+                activeNPCs.Add(this);
+            }
+
             Debug.Log($"{gameObject.name} has been activated!");
         }
     }
+
+    public static void RemoveLastNPC()
+    {
+        if (activeNPCs.Count == 0 || activeNPCs == null) return;
+
+        HumanNPC lastNPC = activeNPCs[activeNPCs.Count - 1];
+        activeNPCs.Remove(lastNPC);
+        Destroy(lastNPC.gameObject);
+    }
+
 
     public void TryFollowMove(Vector3Int direction)
     {
         Vector3Int nextPosition = currentGridPosition + direction;
 
         // Attempt to activate any inactive NPCs in the next tile
-        foreach (HumanNPC npc in FindObjectsOfType<HumanNPC>())
+        foreach (HumanNPC npc in activeNPCs)
         {
             if (!npc.IsActive() && npc.GetCurrentGridPosition() == nextPosition)
             {
@@ -76,7 +101,7 @@ public class HumanNPC : MonoBehaviour
 
         // Check if there's an NPC in the next tile that can't move in the same direction
         HumanNPC npcInNextTile = null;
-        foreach (HumanNPC npc in FindObjectsOfType<HumanNPC>())
+        foreach (HumanNPC npc in activeNPCs)
         {
             if (npc != this && npc.IsActive() && npc.GetCurrentGridPosition() == nextPosition)
             {
@@ -97,7 +122,7 @@ public class HumanNPC : MonoBehaviour
             targetGridPosition = nextPosition;
 
             // Continue group propagation
-            foreach (HumanNPC npc in FindObjectsOfType<HumanNPC>())
+            foreach (HumanNPC npc in activeNPCs)
             {
                 if (npc != this && npc.IsActive() && !npc.IsMoving())
                 {

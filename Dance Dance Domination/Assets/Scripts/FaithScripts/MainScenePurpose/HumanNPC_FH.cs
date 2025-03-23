@@ -11,7 +11,8 @@ public class HumanNPC_FH : MonoBehaviour
     public TempoBarManager tempoBarManager;
 
 
-    public static List<HumanNPC_FH> activeNPCs;
+    public static List<HumanNPC_FH> activeNPCs; 
+    //If player collides to inactive NPCs, it will activate it, and add into this list. (It's info)
 
     public List<int> walkableTileIDs;
     public float moveSpeed = 5f;
@@ -23,7 +24,10 @@ public class HumanNPC_FH : MonoBehaviour
 
     void Start()
     {
-        activeNPCs = new List<HumanNPC_FH>();
+        if (activeNPCs == null)
+        {
+            activeNPCs = new List<HumanNPC_FH>();
+        }
         tempoBarManager = FindObjectOfType<TempoBarManager>();
 
         // Find Tilemap if not assigned
@@ -59,12 +63,6 @@ public class HumanNPC_FH : MonoBehaviour
         {
             MoveObject();
         }
-
-        if (tempoBarManager.isOutforLong())
-        {
-            // RemoveLastNPC();
-        }
-
     }
 
 
@@ -73,27 +71,24 @@ public class HumanNPC_FH : MonoBehaviour
         if (!isActive)
         {
             isActive = true;
-            activeNPCs.Add(this);
-            Debug.Log(activeNPCs.Count);
-            Debug.Log($"{gameObject.name} has been activated!");
+            if (!activeNPCs.Contains(this))
+            {
+                activeNPCs.Add(this);
+            }
         }
     }
 
     public static void RemoveLastNPC()
     {
-        if(activeNPCs.Count > 0 || activeNPCs == null)
+        if (activeNPCs.Count == 0 || activeNPCs == null)
         {
-            Debug.LogError("ActiveNPCs is empty");
             return;
         }
 
         HumanNPC_FH lastNPC = activeNPCs[activeNPCs.Count - 1];
         activeNPCs.Remove(lastNPC);
-        Destroy(lastNPC.gameObject);
-        Debug.Log($"{lastNPC.gameObject.name} has been removed");    
-    
+        Destroy(lastNPC.gameObject);   
     }
-
 
 
     public void TryFollowMove(Vector3Int direction)
