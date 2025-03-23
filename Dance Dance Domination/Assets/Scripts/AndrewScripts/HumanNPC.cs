@@ -90,10 +90,15 @@ public class HumanNPC : MonoBehaviour
     {
         Vector3Int nextPosition = currentGridPosition + direction;
 
-        // Attempt to activate any inactive NPCs in the next tile
-        foreach (HumanNPC npc in activeNPCs)
+        // Attempt to activate any inactive NPCs in all 4 directions around the current NPC
+        foreach (HumanNPC npc in FindObjectsOfType<HumanNPC>())
         {
-            if (!npc.IsActive() && npc.GetCurrentGridPosition() == nextPosition)
+            Vector3Int otherPos = npc.GetCurrentGridPosition();
+            if (!npc.IsActive() && (
+                otherPos == currentGridPosition + Vector3Int.up ||
+                otherPos == currentGridPosition + Vector3Int.down ||
+                otherPos == currentGridPosition + Vector3Int.left ||
+                otherPos == currentGridPosition + Vector3Int.right))
             {
                 npc.ActivateObject();
             }
@@ -101,7 +106,7 @@ public class HumanNPC : MonoBehaviour
 
         // Check if there's an NPC in the next tile that can't move in the same direction
         HumanNPC npcInNextTile = null;
-        foreach (HumanNPC npc in activeNPCs)
+        foreach (HumanNPC npc in FindObjectsOfType<HumanNPC>())
         {
             if (npc != this && npc.IsActive() && npc.GetCurrentGridPosition() == nextPosition)
             {
@@ -122,7 +127,7 @@ public class HumanNPC : MonoBehaviour
             targetGridPosition = nextPosition;
 
             // Continue group propagation
-            foreach (HumanNPC npc in activeNPCs)
+            foreach (HumanNPC npc in FindObjectsOfType<HumanNPC>())
             {
                 if (npc != this && npc.IsActive() && !npc.IsMoving())
                 {
@@ -131,8 +136,6 @@ public class HumanNPC : MonoBehaviour
             }
         }
     }
-
-
 
 
     void MoveObject()
