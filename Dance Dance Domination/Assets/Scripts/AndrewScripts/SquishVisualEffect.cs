@@ -10,7 +10,6 @@ public class SquishVisualEffect : MonoBehaviour
     public Sprite activeSprite2;
 
     [Header("Bounce Settings")]
-    public float bpm = 120f;
     public float activeBounceHeight = 0.05f;
     public float idleBounceHeight = 0.01f;
     public float squashAmount = 0.05f;
@@ -23,10 +22,7 @@ public class SquishVisualEffect : MonoBehaviour
     private Vector3 initialScale;
     private bool isMovingBounce = false;
     private bool toggleSprite = false;
-
-    private static float lastGlobalBeatTime = 0f;
-    private static float beatInterval => 60f / globalBPM;
-    private static float globalBPM = 120f;
+    private int beatCounter = 0;
 
     void Start()
     {
@@ -36,10 +32,15 @@ public class SquishVisualEffect : MonoBehaviour
         npc = GetComponent<HumanNPC>();
         player = GetComponent<PlayerMovement>();
 
-        globalBPM = bpm; // Shared static for syncing if needed
+        PlayerTempoContoller.OnGlobalBeat += OnGlobalBeat;
     }
 
-    public void OnBeat()
+    void OnDestroy()
+    {
+        PlayerTempoContoller.OnGlobalBeat -= OnGlobalBeat;
+    }
+
+    void OnGlobalBeat()
     {
         if (isMovingBounce) return;
 
@@ -48,16 +49,18 @@ public class SquishVisualEffect : MonoBehaviour
         float squash = 1 - squashAmount;
         float stretch = 1 + squashAmount;
 
-        // Apply bounce
         targetSprite.localPosition = initialPos + new Vector3(0, bounceHeight, 0);
         targetSprite.localScale = new Vector3(initialScale.x * squash, initialScale.y * stretch, initialScale.z);
         StartCoroutine(ResetBounce(beatBounceDuration));
 
-        // Flip sprite every 1 beat (based on global beat count)
-        if (isActive && Time.frameCount % 1 == 0 && activeSprite1 != null && activeSprite2 != null)
+        if (isActive)
         {
-            toggleSprite = !toggleSprite;
-            spriteRenderer.sprite = toggleSprite ? activeSprite1 : activeSprite2;
+            beatCounter++;
+            if (activeSprite1 != null && activeSprite2 != null && beatCounter % 2 == 0)
+            {
+                toggleSprite = !toggleSprite;
+                spriteRenderer.sprite = toggleSprite ? activeSprite1 : activeSprite2;
+            }
         }
     }
 
