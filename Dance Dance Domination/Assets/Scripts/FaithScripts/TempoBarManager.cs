@@ -20,6 +20,8 @@ public class TempoBarManager : MonoBehaviour
     public float missTime = 1.0f;
     private float lastInputTime;
 
+    private float timeAwayFromZone;
+
 
     private void Start()
     {
@@ -45,8 +47,6 @@ public class TempoBarManager : MonoBehaviour
             lastInputTime = Time.time;
             OnHit(false);
         }
-
-
     }
 
 
@@ -70,7 +70,7 @@ public class TempoBarManager : MonoBehaviour
         }
         else
         {
-            velocity += moveSpeed * direction * 1.5f * Time.deltaTime; 
+            velocity += moveSpeed * direction * 2f * Time.deltaTime; 
         }
 
         velocity = Mathf.Clamp(velocity, -maxSpeed, maxSpeed);
@@ -82,6 +82,24 @@ public class TempoBarManager : MonoBehaviour
         float zoneRight = TempoZone.position.x + (TempoZone.localScale.x / 2);
 
         return transform.position.x >= zoneLeft && transform.position.x <= zoneRight;
+    }
+
+    public bool isOutforLong()
+    {
+        if (!IsInsideTempoZone())
+        {
+            timeAwayFromZone += Time.deltaTime;
+
+            if (timeAwayFromZone >= 4.0f)
+            {
+                return true;
+            }
+        }
+        else
+        {
+            timeAwayFromZone = 0;
+        }
+        return false;
     }
 
 

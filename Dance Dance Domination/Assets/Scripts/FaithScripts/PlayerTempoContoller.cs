@@ -88,10 +88,7 @@ public class PlayerTempoContoller : MonoBehaviour
         if (difference <= beatThreshold)
         {
             Debug.Log("true");
-            //something can happen here
-
-            //
-
+            //StartCoroutine(FlashGreen());
             return true;
         }
         else
@@ -99,16 +96,22 @@ public class PlayerTempoContoller : MonoBehaviour
             Debug.Log("false");
             StartCoroutine(FlashRed());
             negativeVisFeedback.ShakeCamera();
-
-            //something can happen here
-
-            //
-
-
             return false;
         }
     }
 
+
+    IEnumerator FlashGreen()
+    {
+        SpriteRenderer sr = negativeVisSprite.GetComponent<SpriteRenderer>(); 
+        Color originColor = sr.color;
+
+        sr.color = Color.green;
+        negativeVisSprite.SetActive(true);
+        yield return new WaitForSeconds(0.4f);
+        negativeVisSprite.SetActive(false);
+        sr.color = originColor; 
+    }
 
     IEnumerator FlashRed()
     {

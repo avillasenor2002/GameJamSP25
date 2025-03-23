@@ -436,6 +436,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TempoBar
       objectReference: {fileID: 0}
+    - target: {fileID: 8274380881918864837, guid: e82f99171f9a95245b8026287bd46981, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
