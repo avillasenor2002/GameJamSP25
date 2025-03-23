@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 2173818802751743693}
   - component: {fileID: 3791111199157361978}
   - component: {fileID: 2339090679028232064}
+  - component: {fileID: 1155947769088244011}
   m_Layer: 0
-  m_Name: Test Human
+  m_Name: NPC - Scene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -107,7 +108,7 @@ MonoBehaviour:
   spriteObject: {fileID: 6917963477567142562}
   fadeInDuration: 0.5
   flickerDuration: 0.5
-  ghostPrefab: {fileID: 2154413107942261841, guid: 92cb096e18f8c7e4085671e79dc2cfee, type: 3}
+  ghostPrefab: {fileID: 2154413107942261841, guid: 6c162359d1289b6479a59b537bfb099a, type: 3}
   spawnParticles: {fileID: 2250993424995466299, guid: 588d0339cb1b999459213fee96f290aa, type: 3}
   activateParticles: {fileID: 2250993424995466299, guid: 087b97c40931b0642ade8b5363b631ce, type: 3}
   destroyParticles: {fileID: 2250993424995466299, guid: 588d0339cb1b999459213fee96f290aa, type: 3}
@@ -125,13 +126,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetSprite: {fileID: 1194133148270135456}
   spriteRenderer: {fileID: 5881246862198927748}
-  activeSprite1: {fileID: 21300000, guid: 03d9a8a3851c06e4e80257272fd85589, type: 3}
-  activeSprite2: {fileID: 21300000, guid: 9ea3f18f3681f59458e28a926c5e13c0, type: 3}
+  activeSprite1: {fileID: 21300000, guid: b549966f4c6ff954da8aa7dae7005c2d, type: 3}
+  activeSprite2: {fileID: 21300000, guid: 89b202cd40c726b4ab90b7560b8cc9ea, type: 3}
   activeBounceHeight: 0.2
   idleBounceHeight: 0.01
   squashAmount: 0.05
   moveBounceHeight: 0.2
   beatBounceDuration: 0.12
+--- !u!114 &1155947769088244011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3621702298598309983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 832f3bacf80c0f443983862c87264c16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6917963477567142562
 GameObject:
   m_ObjectHideFlags: 0
@@ -141,7 +154,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1194133148270135456}
-  - component: {fileID: 2783355716284581392}
   - component: {fileID: 5881246862198927748}
   m_Layer: 0
   m_Name: Test Sprite
@@ -160,56 +172,11 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.3, z: 0}
-  m_LocalScale: {x: 0.42999998, y: 0.42999998, z: 0.42999998}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 7780806092777647699}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &2783355716284581392
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6917963477567142562}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 1.5, y: 0.29999998, z: 1.5, w: 0.29999998}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 6.72, y: 4.48}
-    newSize: {x: 6.72, y: 4.48}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 3.58, y: 3.65}
-  m_EdgeRadius: 0
 --- !u!212 &5881246862198927748
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -251,7 +218,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: 09582f64c79b0434cb20b68d5866d2d2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c3cc6d29cd1e19047affa0265dec8092, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
