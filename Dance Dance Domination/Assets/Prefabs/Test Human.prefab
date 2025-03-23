@@ -120,10 +120,12 @@ MonoBehaviour:
   spriteRenderer: {fileID: 5881246862198927748}
   activeSprite1: {fileID: 21300000, guid: 03d9a8a3851c06e4e80257272fd85589, type: 3}
   activeSprite2: {fileID: 21300000, guid: 9ea3f18f3681f59458e28a926c5e13c0, type: 3}
-  bpm: 130
-  bounceHeight: 0.05
+  activeBounceHeight: 0.2
+  idleBounceHeight: 0.01
+  squashAmount: 0.05
   moveBounceHeight: 0.2
-  spriteFlipInterval: 0.25
+  beatBounceDuration: 0.12
+  tempoController: {fileID: 0}
 --- !u!1 &6917963477567142562
 GameObject:
   m_ObjectHideFlags: 0

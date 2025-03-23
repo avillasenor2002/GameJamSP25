@@ -3781,10 +3781,9 @@ MonoBehaviour:
   spriteRenderer: {fileID: 889374054}
   activeSprite1: {fileID: 21300000, guid: 1c8f019797d39894d9830851c014f782, type: 3}
   activeSprite2: {fileID: 21300000, guid: 2425d10bcd4c6cb4f820d2edb3492f0a, type: 3}
-  bpm: 130
   activeBounceHeight: 0.2
   idleBounceHeight: 0.01
-  squashAmount: 0.5
+  squashAmount: 0.2
   moveBounceHeight: 0.2
   beatBounceDuration: 0.12
 --- !u!1001 &1398683234
@@ -4233,6 +4232,7 @@ GameObject:
   - component: {fileID: 1671469493}
   - component: {fileID: 1671469492}
   - component: {fileID: 1671469491}
+  - component: {fileID: 1671469494}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -4314,6 +4314,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1671469494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1671469490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae07a5ebb7bbcea499c14115febdf318, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bobAmount: 0.05
+  bobDuration: 0.05
 --- !u!1001 &1678286183
 PrefabInstance:
   m_ObjectHideFlags: 0
