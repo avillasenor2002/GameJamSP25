@@ -14,9 +14,6 @@ public class EntryEnter : MonoBehaviour
 
     private void Start()
     {
-        playerNameInput.gameObject.SetActive(false);
-        submitScoreButton.gameObject.SetActive(false);
-
         scoreboardContainer.SetActive(false);
     }
 

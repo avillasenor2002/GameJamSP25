@@ -52,18 +52,16 @@ public class GameTimerManager : MonoBehaviour
 
     void EndGame()
     {
-        Debug.Log("Game Over!");
         timerText.text = "Time: 0\nGAME OVER";
         hazardSpawner.StopSpawning();
-
         StartCoroutine(slowsDownEnd());
+
     }
 
     IEnumerator slowsDownEnd()
     {
         //Some kind of visual indication like fade out
-
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
         SceneSequencing.instance.EndSceneLoad();
     }
 
