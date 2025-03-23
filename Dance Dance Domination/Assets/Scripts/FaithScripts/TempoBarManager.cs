@@ -45,7 +45,7 @@ public class TempoBarManager : MonoBehaviour
     {
         HandleMovement();
 
-        if (!Input.GetKey(KeyCode.Space))
+        if (!Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D))
         {
             MoveAwayFromTempoZone();
         }

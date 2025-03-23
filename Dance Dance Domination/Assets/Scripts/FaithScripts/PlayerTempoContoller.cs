@@ -45,7 +45,7 @@ public class PlayerTempoContoller : MonoBehaviour
             nextChangeTime += changePitchInterval;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D))
         {
             bool isSuccess = CheckHitTiming();
             TempoBarManager.OnHit(isSuccess);
