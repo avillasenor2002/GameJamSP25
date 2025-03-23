@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 public class PlayerMovement_FH : MonoBehaviour
 {
     public Tilemap tilemap;
-    public TilemapDataAssigner tileDataAssigner;
+    public TilemapDataAssigner_FH tileDataAssigner;
     public List<int> walkableTileIDs;
     public float moveSpeed = 5f;
 
@@ -44,8 +44,8 @@ public class PlayerMovement_FH : MonoBehaviour
             Vector3Int potentialPosition = currentGridPosition + direction;
 
             // Try to activate NPCs in front of player
-            HumanNPC[] npcs = FindObjectsOfType<HumanNPC>();
-            foreach (HumanNPC npc in npcs)
+            HumanNPC_FH[] npcs = FindObjectsOfType<HumanNPC_FH>();
+            foreach (HumanNPC_FH npc in npcs)
             {
                 if (npc.GetCurrentGridPosition() == potentialPosition)
                 {
@@ -63,7 +63,7 @@ public class PlayerMovement_FH : MonoBehaviour
             }
 
             // Regardless of player success, allow NPCs to try to move
-            foreach (HumanNPC npc in npcs)
+            foreach (HumanNPC_FH npc in npcs)
             {
                 if (npc.IsActive() && !npc.IsMoving())
                 {
@@ -105,7 +105,7 @@ public class PlayerMovement_FH : MonoBehaviour
     {
         if (!IsTileWalkable(gridPosition)) return false;
 
-        foreach (HumanNPC npc in FindObjectsOfType<HumanNPC>())
+        foreach (HumanNPC_FH npc in FindObjectsOfType<HumanNPC_FH>())
         {
             if (npc.GetCurrentGridPosition() == gridPosition && npc.WillBlockTile(gridPosition))
                 return false;
@@ -116,7 +116,7 @@ public class PlayerMovement_FH : MonoBehaviour
 
     private bool IsChainBlocked(Vector3Int position, Vector3Int direction)
     {
-        foreach (HumanNPC npc in FindObjectsOfType<HumanNPC>())
+        foreach (HumanNPC_FH npc in FindObjectsOfType<HumanNPC_FH>())
         {
             if (npc.IsActive() && npc.GetCurrentGridPosition() == position)
             {

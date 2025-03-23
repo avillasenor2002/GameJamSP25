@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6128073686751569531}
   - component: {fileID: 7297522767066544410}
+  - component: {fileID: 6692741187381894109}
   m_Layer: 0
   m_Name: Gray
   m_TagString: Untagged
@@ -84,6 +85,51 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &6692741187381894109
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1663334646174820560}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &6576577106685393670
 GameObject:
   m_ObjectHideFlags: 0
@@ -181,7 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d900d957a07bfa44f85d5908cba12070, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TempoZone: {fileID: 5738390873272194237}
+  tempoZone: {fileID: 1071415480062603740}
   moveSpeed: -0.5
   successMoveSpeed: 2
   failMoveSpeed: -2
@@ -189,6 +235,8 @@ MonoBehaviour:
   maxX: 3.17
   maxSpeed: 2
   missTime: 1
+  secondsPlayerWasOut: 4
+  gray: {fileID: 1663334646174820560}
 --- !u!1 &6930490111360008423
 GameObject:
   m_ObjectHideFlags: 0
@@ -199,6 +247,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5738390873272194237}
   - component: {fileID: 2298400445836090276}
+  - component: {fileID: 1071415480062603740}
+  - component: {fileID: 4921061563099784334}
   m_Layer: 0
   m_Name: ChangingTempo
   m_TagString: Untagged
@@ -273,6 +323,64 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1071415480062603740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6930490111360008423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 782db0314f4cb9440b440dda070c8aac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gray: {fileID: 1663334646174820560}
+--- !u!61 &4921061563099784334
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6930490111360008423}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &6954632418223582723
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,7 +578,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.73484, y: 0.73484, z: 0.73484}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2164671301945026578}
@@ -492,7 +600,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TempoBarManager: {fileID: 2018318328425963463}
-  targetZone: {fileID: 5738390873272194237}
+  tempoZone: {fileID: 1071415480062603740}
   AudioSource: {fileID: 8274380881918864837}
   bpm: 130
   beatThreshold: 0.4
@@ -500,6 +608,7 @@ MonoBehaviour:
   minBPM: 100
   maxBPM: 160
   negativeVisSprite: {fileID: 7119376581820362517}
+  gray: {fileID: 1663334646174820560}
 --- !u!82 &8274380881918864837
 AudioSource:
   m_ObjectHideFlags: 0

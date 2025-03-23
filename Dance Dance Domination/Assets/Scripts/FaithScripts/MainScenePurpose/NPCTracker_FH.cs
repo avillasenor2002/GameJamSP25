@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class NPCTracker_FH : MonoBehaviour
 {
     public Tilemap tilemap;
-    public TilemapDataAssigner tileDataAssigner;
+    public TilemapDataAssigner_FH tileDataAssigner;
 
     [Header("NPC Spawning")]
     public GameObject npcPrefab;
@@ -93,13 +93,13 @@ public class NPCTracker_FH : MonoBehaviour
 
     bool IsTileOccupied(Vector3Int pos)
     {
-        foreach (HumanNPC npc in FindObjectsOfType<HumanNPC>())
+        foreach (HumanNPC_FH npc in FindObjectsOfType<HumanNPC_FH>())
         {
             if (npc.GetCurrentGridPosition() == pos)
                 return true;
         }
 
-        foreach (PlayerMovement player in FindObjectsOfType<PlayerMovement>())
+        foreach (PlayerMovement_FH player in FindObjectsOfType<PlayerMovement_FH>())
         {
             if (player.GetCurrentGridPosition() == pos)
                 return true;
@@ -110,11 +110,11 @@ public class NPCTracker_FH : MonoBehaviour
 
     void HandleReassign()
     {
-        HumanNPC[] allNPCs = FindObjectsOfType<HumanNPC>();
-        List<HumanNPC> active = new List<HumanNPC>();
-        List<HumanNPC> inactive = new List<HumanNPC>();
+        HumanNPC_FH[] allNPCs = FindObjectsOfType<HumanNPC_FH>();
+        List<HumanNPC_FH> active = new List<HumanNPC_FH>();
+        List<HumanNPC_FH> inactive = new List<HumanNPC_FH>();
 
-        foreach (HumanNPC npc in allNPCs)
+        foreach (HumanNPC_FH npc in allNPCs)
         {
             if (npc.isActive)
                 active.Add(npc);
@@ -124,10 +124,10 @@ public class NPCTracker_FH : MonoBehaviour
 
         if (active.Count == 0) return;
 
-        HumanNPC targetNPC = null;
+        HumanNPC_FH targetNPC = null;
         int lowestCount = int.MaxValue;
 
-        foreach (HumanNPC npc in active)
+        foreach (HumanNPC_FH npc in active)
         {
             int count = CountNearby(npc);
             if (count < lowestCount)
@@ -145,7 +145,7 @@ public class NPCTracker_FH : MonoBehaviour
         }
     }
 
-    int CountNearby(HumanNPC npc)
+    int CountNearby(HumanNPC_FH npc)
     {
         Vector3Int pos = npc.GetCurrentGridPosition();
         int count = 0;
@@ -155,7 +155,7 @@ public class NPCTracker_FH : MonoBehaviour
         {
             Vector3Int check = pos + dir;
 
-            foreach (HumanNPC other in FindObjectsOfType<HumanNPC>())
+            foreach (HumanNPC_FH other in FindObjectsOfType<HumanNPC_FH>())
             {
                 if (other != npc && other.GetCurrentGridPosition() == check)
                 {
@@ -164,7 +164,7 @@ public class NPCTracker_FH : MonoBehaviour
                 }
             }
 
-            foreach (PlayerMovement p in FindObjectsOfType<PlayerMovement>())
+            foreach (PlayerMovement_FH p in FindObjectsOfType<PlayerMovement_FH>())
             {
                 if (p.GetCurrentGridPosition() == check)
                 {
@@ -180,7 +180,7 @@ public class NPCTracker_FH : MonoBehaviour
     int CountActiveNPCs()
     {
         int count = 0;
-        foreach (HumanNPC npc in FindObjectsOfType<HumanNPC>())
+        foreach (HumanNPC_FH npc in FindObjectsOfType<HumanNPC_FH>())
         {
             if (npc.isActive) count++;
         }
@@ -192,10 +192,10 @@ public class NPCTracker_FH : MonoBehaviour
         cleanupInProgress = true;
         spawningAllowed = false;
 
-        PlayerMovement player = FindObjectOfType<PlayerMovement>();
+        PlayerMovement_FH player = FindObjectOfType<PlayerMovement_FH>();
         Vector3 playerCenter = player.transform.position;
 
-        HumanNPC[] npcs = FindObjectsOfType<HumanNPC>();
+        HumanNPC_FH[] npcs = FindObjectsOfType<HumanNPC_FH>();
         SpriteRenderer[] npcSprites = new SpriteRenderer[npcs.Length];
         for (int i = 0; i < npcs.Length; i++)
         {
@@ -219,7 +219,7 @@ public class NPCTracker_FH : MonoBehaviour
             }
         }
 
-        foreach (HumanNPC npc in npcs)
+        foreach (HumanNPC_FH npc in npcs)
         {
             if (!npc.isActive)
                 Destroy(npc.gameObject);
@@ -227,7 +227,7 @@ public class NPCTracker_FH : MonoBehaviour
 
         yield return new WaitForSeconds(delayBeforeActiveNPCRemoval);
 
-        foreach (HumanNPC npc in FindObjectsOfType<HumanNPC>())
+        foreach (HumanNPC_FH npc in FindObjectsOfType<HumanNPC_FH>())
         {
             Destroy(npc.gameObject);
         }
