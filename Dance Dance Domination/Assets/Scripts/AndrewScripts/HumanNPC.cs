@@ -18,6 +18,16 @@ public class HumanNPC : MonoBehaviour
     //Faith Addition
     public static List<HumanNPC> activeNPCs;
 
+    public GameObject spriteObject; // This is the visual GameObject with the SpriteRenderer
+    private SpriteRenderer spriteRenderer;
+
+    public float fadeInDuration = 0.5f;
+    public float flickerDuration = 0.5f;
+    public GameObject ghostPrefab; // Gray fading copy of the sprite
+
+    public ParticleSystem spawnParticles;
+    public ParticleSystem activateParticles;
+    public ParticleSystem destroyParticles;
 
     void Start()
     {
@@ -48,10 +58,28 @@ public class HumanNPC : MonoBehaviour
             activeNPCs = new List<HumanNPC>();
         }
 
-
         currentGridPosition = tilemap.WorldToCell(transform.position);
         CenterOnTile(currentGridPosition);
         targetGridPosition = currentGridPosition;
+
+        if (spriteObject != null)
+        {
+            spriteRenderer = spriteObject.GetComponent<SpriteRenderer>();
+
+            if (spriteRenderer != null)
+            {
+                Color color = spriteRenderer.color;
+                color.a = 0f;
+                spriteRenderer.color = color;
+                StartCoroutine(FadeInSprite());
+            }
+        }
+
+        if (spawnParticles != null)
+        {
+            Instantiate(spawnParticles, transform.position, Quaternion.identity).Play();
+        }
+
     }
 
     void Update()
@@ -72,7 +100,15 @@ public class HumanNPC : MonoBehaviour
                 activeNPCs.Add(this);
             }
 
-            Debug.Log($"{gameObject.name} has been activated!");
+            if (activateParticles != null)
+            {
+                Instantiate(activateParticles, transform.position, Quaternion.identity).Play();
+            }
+
+            if (spriteRenderer != null)
+            {
+                StartCoroutine(FlickerSprite());
+            }
         }
     }
 
@@ -238,4 +274,80 @@ public class HumanNPC : MonoBehaviour
         // Also check if a wall or non-walkable tile is directly in front
         return !IsTileWalkable(position);
     }
+
+    private void OnDestroy()
+    {
+        if (destroyParticles != null)
+        {
+            Instantiate(destroyParticles, transform.position, Quaternion.identity).Play();
+        }
+
+        if (ghostPrefab != null && spriteRenderer != null)
+        {
+            GameObject ghost = Instantiate(ghostPrefab, transform.position, Quaternion.identity);
+            SpriteRenderer ghostRenderer = ghost.GetComponent<SpriteRenderer>();
+
+            if (ghostRenderer != null)
+            {
+                ghostRenderer.sprite = spriteRenderer.sprite;
+                ghostRenderer.flipX = spriteRenderer.flipX;
+            }
+        }
+    }
+
+    IEnumerator FadeInSprite()
+    {
+        float timer = 0f;
+        Color color = spriteRenderer.color;
+
+        while (timer < fadeInDuration)
+        {
+            float alpha = Mathf.Lerp(0f, 1f, timer / fadeInDuration);
+            spriteRenderer.color = new Color(color.r, color.g, color.b, alpha);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        spriteRenderer.color = new Color(color.r, color.g, color.b, 1f);
+    }
+
+    IEnumerator FlickerSprite()
+    {
+        float timer = 0f;
+        bool on = true;
+
+        while (timer < flickerDuration)
+        {
+            spriteObject.SetActive(on);
+            on = !on;
+            timer += 0.05f;
+            yield return new WaitForSeconds(0.05f);
+        }
+
+        spriteObject.SetActive(true);
+    }
+
+    IEnumerator FadeOutGhost(SpriteRenderer ghostRenderer)
+    {
+        float duration = 0.75f;
+        float t = 0f;
+        Color startColor = ghostRenderer.color;
+
+        GameObject ghostObject = ghostRenderer.transform.root.gameObject;
+
+        while (t < duration)
+        {
+            float alpha = Mathf.Lerp(1f, 0f, t / duration);
+            ghostRenderer.color = new Color(startColor.r, startColor.g, startColor.b, alpha);
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        // Ensure the alpha is completely zero at the end
+        ghostRenderer.color = new Color(startColor.r, startColor.g, startColor.b, 0f);
+
+        Destroy(ghostObject);
+    }
+
+
 }

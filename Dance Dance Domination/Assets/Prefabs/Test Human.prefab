@@ -104,6 +104,13 @@ MonoBehaviour:
   walkableTileIDs: 00000000
   moveSpeed: 5
   isActive: 0
+  spriteObject: {fileID: 6917963477567142562}
+  fadeInDuration: 0.5
+  flickerDuration: 0.5
+  ghostPrefab: {fileID: 2154413107942261841, guid: 92cb096e18f8c7e4085671e79dc2cfee, type: 3}
+  spawnParticles: {fileID: 2250993424995466299, guid: 588d0339cb1b999459213fee96f290aa, type: 3}
+  activateParticles: {fileID: 2250993424995466299, guid: 087b97c40931b0642ade8b5363b631ce, type: 3}
+  destroyParticles: {fileID: 2250993424995466299, guid: 588d0339cb1b999459213fee96f290aa, type: 3}
 --- !u!114 &2339090679028232064
 MonoBehaviour:
   m_ObjectHideFlags: 0
