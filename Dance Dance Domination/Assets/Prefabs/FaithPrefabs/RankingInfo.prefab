@@ -186,9 +186,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 489fbf9a90c7e6143bf875cb167f09da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NameLabel: {fileID: 0}
-  ScoreLabel: {fileID: 0}
-  rankLabel: {fileID: 0}
+  NameLabel: {fileID: 3672616884663766665}
+  ScoreLabel: {fileID: 8985202939807891729}
+  rankLabel: {fileID: 361866959807533739}
 --- !u!114 &8931318941465875106
 MonoBehaviour:
   m_ObjectHideFlags: 0
