@@ -264,7 +264,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &122472803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1683,6 +1683,8 @@ PlayableDirector:
     value: {fileID: 221074404}
   - key: {fileID: 7382255477967517897, guid: 79fec6280adab474a9adb60b28f1b19c, type: 2}
     value: {fileID: 1307067922}
+  - key: {fileID: 6441596265888855523, guid: 79fec6280adab474a9adb60b28f1b19c, type: 2}
+    value: {fileID: 122472802}
   m_ExposedReferences:
     m_References: []
 --- !u!4 &2103174878

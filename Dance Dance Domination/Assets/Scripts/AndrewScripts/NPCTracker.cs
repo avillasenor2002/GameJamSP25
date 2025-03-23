@@ -223,8 +223,6 @@ public class NPCTracker : MonoBehaviour
 
         StartCoroutine(FadeImage(true));
 
-        playerSprite.material = whiteMaterial;
-
         foreach (var npc in npcs)
         {
             if (npc.isActive)
