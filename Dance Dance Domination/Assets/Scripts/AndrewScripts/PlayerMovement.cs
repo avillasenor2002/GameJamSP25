@@ -40,10 +40,10 @@ public class PlayerMovement : MonoBehaviour
     void HandleInput()
     {
         Vector3Int direction = Vector3Int.zero;
-        if (Input.GetKey(KeyCode.W)) direction = Vector3Int.up;
-        else if (Input.GetKey(KeyCode.S)) direction = Vector3Int.down;
-        else if (Input.GetKey(KeyCode.A)) direction = Vector3Int.left;
-        else if (Input.GetKey(KeyCode.D)) direction = Vector3Int.right;
+        if (Input.GetKey(KeyCode.UpArrow)) direction = Vector3Int.up;
+        else if (Input.GetKey(KeyCode.DownArrow)) direction = Vector3Int.down;
+        else if (Input.GetKey(KeyCode.LeftArrow)) direction = Vector3Int.left;
+        else if (Input.GetKey(KeyCode.RightArrow)) direction = Vector3Int.right;
 
         if (direction != Vector3Int.zero)
         {
