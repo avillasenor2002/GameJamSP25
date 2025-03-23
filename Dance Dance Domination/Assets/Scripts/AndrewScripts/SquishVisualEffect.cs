@@ -4,35 +4,83 @@ using UnityEngine;
 
 public class SquishVisualEffect : MonoBehaviour
 {
-    public float squishSpeed = 2f;         // How fast it squishes
-    public float squishAmount = 0.1f;      // How much it squishes
-    private Vector3 originalScale;
+    public Transform targetSprite; // Assign the child sprite in Inspector
+    public float idleBounceSpeed = 4f;
+    public float idleBounceHeight = 0.05f;
+    public float moveBounceHeight = 0.2f;
+    public float bounceDuration = 0.15f;
 
-    private static float globalSquishTimer = 0f;
+    private Vector3 initialLocalPos;
+    private bool isMovingBounce = false;
 
     void Start()
     {
-        originalScale = transform.localScale;
+        if (targetSprite == null)
+        {
+            Debug.LogWarning($"{name} has no targetSprite assigned to BounceVisualEffect.");
+            enabled = false;
+            return;
+        }
+
+        initialLocalPos = targetSprite.localPosition;
     }
 
     void Update()
     {
-        SyncGlobalSquishTime();
+        bool isMoving = false;
 
-        float scaleY = 1f + Mathf.Sin(globalSquishTimer * squishSpeed) * squishAmount;
-        float scaleX = 1f - (scaleY - 1f); // Inverse to maintain volume feel
-        transform.localScale = new Vector3(originalScale.x * scaleX, originalScale.y * scaleY, originalScale.z);
+        var player = GetComponent<PlayerMovement>();
+        var npc = GetComponent<HumanNPC>();
+
+        if (player != null) isMoving = player.IsMoving();
+        if (npc != null && npc.IsActive()) isMoving = npc.IsMoving();
+
+        if (!isMovingBounce)
+        {
+            IdleBounce();
+        }
+
+        if (isMoving && !isMovingBounce)
+        {
+            StartCoroutine(DoMoveBounce());
+        }
     }
 
-    void SyncGlobalSquishTime()
+    void IdleBounce()
     {
-        // All squish effects will reference this shared timer
-        globalSquishTimer += Time.deltaTime;
+        float yOffset = Mathf.Abs(Mathf.Sin(Time.time * idleBounceSpeed)) * idleBounceHeight;
+        targetSprite.localPosition = initialLocalPos + new Vector3(0, yOffset, 0);
+    }
 
-        // Optional reset after 1000 seconds to prevent overflow
-        if (globalSquishTimer > 1000f)
+    IEnumerator DoMoveBounce()
+    {
+        isMovingBounce = true;
+
+        float elapsed = 0f;
+        float halfDuration = bounceDuration / 2f;
+
+        // Bounce up
+        while (elapsed < halfDuration)
         {
-            globalSquishTimer = 0f;
+            float progress = elapsed / halfDuration;
+            float yOffset = Mathf.Lerp(0, moveBounceHeight, progress);
+            targetSprite.localPosition = initialLocalPos + new Vector3(0, yOffset, 0);
+            elapsed += Time.deltaTime;
+            yield return null;
         }
+
+        // Bounce back to original position
+        elapsed = 0f;
+        while (elapsed < halfDuration)
+        {
+            float progress = elapsed / halfDuration;
+            float yOffset = Mathf.Lerp(moveBounceHeight, 0, progress);
+            targetSprite.localPosition = initialLocalPos + new Vector3(0, yOffset, 0);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        targetSprite.localPosition = initialLocalPos;
+        isMovingBounce = false;
     }
 }
