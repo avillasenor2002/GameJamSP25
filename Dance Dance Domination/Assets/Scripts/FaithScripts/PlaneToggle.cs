@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class PlaneToggle : MonoBehaviour
 {
-
     public GameObject planeObject;
     public void OnPressScoreShow()
     {
         if (planeObject != null)
         {
-            bool isActive = planeObject.activeSelf;
-            planeObject.SetActive(!isActive);
+            bool isActive = !planeObject.activeSelf;
+            planeObject.SetActive(isActive);
         }
     }
 }

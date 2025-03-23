@@ -60,7 +60,6 @@ public class EntryEnter : MonoBehaviour
         playerNameInput.gameObject.SetActive(true);
         submitScoreButton.gameObject.SetActive(true);
         justRandomBlackTransparentBackground.gameObject.SetActive(true);
-
     }
 
 }

@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class SceneSequencing : MonoBehaviour
 {
     public static SceneSequencing instance;
-    public GameObject planeObject;
 
     private void Awake()
     {
