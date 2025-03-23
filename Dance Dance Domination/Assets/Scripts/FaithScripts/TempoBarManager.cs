@@ -20,6 +20,9 @@ public class TempoBarManager : MonoBehaviour
     public float missTime = 1.0f;
     private float lastInputTime;
 
+    private float timeAwayFromZone;
+    //how many seconds the player has been in the zone
+    public float secondsPlayerWasOut = 4.0f;
 
     private void Start()
     {
@@ -45,8 +48,6 @@ public class TempoBarManager : MonoBehaviour
             lastInputTime = Time.time;
             OnHit(false);
         }
-
-
     }
 
 
@@ -70,7 +71,7 @@ public class TempoBarManager : MonoBehaviour
         }
         else
         {
-            velocity += moveSpeed * direction * 1.5f * Time.deltaTime; 
+            velocity += moveSpeed * direction * 2f * Time.deltaTime; 
         }
 
         velocity = Mathf.Clamp(velocity, -maxSpeed, maxSpeed);
@@ -82,6 +83,29 @@ public class TempoBarManager : MonoBehaviour
         float zoneRight = TempoZone.position.x + (TempoZone.localScale.x / 2);
 
         return transform.position.x >= zoneLeft && transform.position.x <= zoneRight;
+    }
+
+    //I placed this in the Updates so that it goes along with the real-time.
+    //isOutforLong will be true if the player is out of the redzone of the bar for certain amount of seconds.
+    //once player is back into the zone, then the time will become = 0 (reset), function will return 0.
+    
+    // usage: if(TempoBarManager.isOutforLong()) { //Add penalty here }
+    public bool isOutforLong()
+    {
+        if (!IsInsideTempoZone())
+        {
+            timeAwayFromZone += Time.deltaTime;
+
+            if (timeAwayFromZone >= secondsPlayerWasOut)
+            {
+                return true;
+            }
+        }
+        else
+        {
+            timeAwayFromZone = 0;
+        }
+        return false;
     }
 
 
