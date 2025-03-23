@@ -58,7 +58,7 @@ public class TilemapDataAssigner : MonoBehaviour
 
                 tileDataGrid[x, y] = new TileData { tileType = tileType, tileName = currentTile != null ? currentTile.name : "Empty" };
 
-                Debug.Log($"Tile [{x}, {y}] - Position: {tilePosition} - TileType: {tileType}");
+                //Debug.Log($"Tile [{x}, {y}] - Position: {tilePosition} - TileType: {tileType}");
             }
         }
     }
