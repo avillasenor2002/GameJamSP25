@@ -17,6 +17,28 @@ public class HumanNPC : MonoBehaviour
 
     void Start()
     {
+        // Find Tilemap if not assigned
+        if (tilemap == null)
+        {
+            tilemap = FindObjectOfType<Tilemap>();
+            if (tilemap == null)
+            {
+                Debug.LogError("HumanNPC: Tilemap not found in the scene!");
+                return;
+            }
+        }
+
+        // Find TileDataAssigner if not assigned
+        if (tileDataAssigner == null)
+        {
+            tileDataAssigner = FindObjectOfType<TilemapDataAssigner>();
+            if (tileDataAssigner == null)
+            {
+                Debug.LogError("HumanNPC: TilemapDataAssigner not found in the scene!");
+                return;
+            }
+        }
+
         currentGridPosition = tilemap.WorldToCell(transform.position);
         CenterOnTile(currentGridPosition);
         targetGridPosition = currentGridPosition;
@@ -105,15 +127,29 @@ public class HumanNPC : MonoBehaviour
     {
         if (!IsTileWalkable(gridPosition)) return false;
 
+        // Block other NPCs if they're occupying the space and won't move
         foreach (HumanNPC npc in FindObjectsOfType<HumanNPC>())
         {
             if (npc != this && npc.GetCurrentGridPosition() == gridPosition && npc.WillBlockTile(gridPosition))
+            {
                 return false;
+            }
         }
 
+        // Block if trying to move into the player’s position
         PlayerMovement player = FindObjectOfType<PlayerMovement>();
-        if (player != null && player.GetCurrentGridPosition() == gridPosition && player.WillBlockTile(gridPosition))
-            return false;
+        if (player != null)
+        {
+            Vector3Int playerCurrent = player.GetCurrentGridPosition();
+            Vector3Int playerTarget = player.GetTargetGridPosition();
+
+            // If player is not moving, or this NPC is trying to step where the player is/was
+            if ((!player.IsMoving() && playerCurrent == gridPosition) ||
+                (player.IsMoving() && playerTarget == gridPosition))
+            {
+                return false;
+            }
+        }
 
         return true;
     }
@@ -174,6 +210,4 @@ public class HumanNPC : MonoBehaviour
         // Also check if a wall or non-walkable tile is directly in front
         return !IsTileWalkable(position);
     }
-
-
 }
