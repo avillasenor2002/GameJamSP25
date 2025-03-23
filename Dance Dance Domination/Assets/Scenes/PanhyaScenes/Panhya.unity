@@ -597,6 +597,7 @@ MonoBehaviour:
   mixer: {fileID: 24100000, guid: 168951e33c741e941bdfac82e5001f94, type: 2}
   sfxSlider: {fileID: 0}
   musicSlider: {fileID: 380315761}
+  masterSlider: {fileID: 0}
 --- !u!82 &1351047950
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1123,6 +1124,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7756498394519795849, guid: 39a3bb052679cf94692d27206ddd089f, type: 3}
+      propertyPath: m_FlipX
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8447930745520624487, guid: 39a3bb052679cf94692d27206ddd089f, type: 3}
       propertyPath: m_Name
       value: LilGuy
@@ -1130,8 +1135,28 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8447930745520624487, guid: 39a3bb052679cf94692d27206ddd089f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2113160523}
   m_SourcePrefab: {fileID: 100100000, guid: 39a3bb052679cf94692d27206ddd089f, type: 3}
+--- !u!1 &2113160522 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8447930745520624487, guid: 39a3bb052679cf94692d27206ddd089f, type: 3}
+  m_PrefabInstance: {fileID: 2113160521}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2113160523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2113160522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 046a0dcc3e91d9d43bf4877f6e797891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
