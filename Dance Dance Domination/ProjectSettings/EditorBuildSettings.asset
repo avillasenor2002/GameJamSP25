@@ -6,14 +6,17 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Andrew.unity
-    guid: 1836d8609d5e5cd40aa014b5129ea948
-  - enabled: 1
     path: Assets/Scenes/FaithScenes/IntroAnimatic.unity
     guid: e680d52776f91894f88fe65b3ca3954e
   - enabled: 1
     path: Assets/Scenes/TitleScreen.unity
     guid: dbf79867b90588a48808818e3ab2a00b
+  - enabled: 1
+    path: Assets/Scenes/Andrew.unity
+    guid: 1836d8609d5e5cd40aa014b5129ea948
+  - enabled: 1
+    path: Assets/Scenes/EndScene.unity
+    guid: 8b1157e3ae032584493146e6a2635930
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729

@@ -19,19 +19,16 @@ public class SceneSequencing : MonoBehaviour
         }
     }
 
-
     //From Title Scene to main game
-
-    //From Title Scene to 
-
-    //From main game to the end screen
-
-    public void EndSceneLoad()
+    public void OnPressLoadMainGame()
     {
-
+        SceneManager.LoadScene("Andrew", LoadSceneMode.Single);
     }
 
-
-    //From 
-
+    //From main game to the end screen
+    //Once the timer ends
+    public void EndSceneLoad()
+    {
+        SceneManager.LoadScene("EndScene", LoadSceneMode.Single);
+    }
 }
