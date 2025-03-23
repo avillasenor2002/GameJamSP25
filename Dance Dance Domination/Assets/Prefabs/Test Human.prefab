@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7780806092777647699}
   - component: {fileID: 2173818802751743693}
   - component: {fileID: 3791111199157361978}
+  - component: {fileID: 2339090679028232064}
   m_Layer: 0
   m_Name: Test Human
   m_TagString: Untagged
@@ -103,6 +104,20 @@ MonoBehaviour:
   walkableTileIDs: 00000000
   moveSpeed: 5
   isActive: 0
+--- !u!114 &2339090679028232064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3621702298598309983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d19a69d45ab1a3b4e949d8dd1058933b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  squishSpeed: 3
+  squishAmount: 0.05
 --- !u!1 &6917963477567142562
 GameObject:
   m_ObjectHideFlags: 0
