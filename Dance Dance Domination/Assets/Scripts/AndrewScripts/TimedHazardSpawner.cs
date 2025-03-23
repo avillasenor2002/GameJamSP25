@@ -14,6 +14,16 @@ public class TimedHazardSpawner : MonoBehaviour
     public float warningDuration = 1.5f;
     public float hazardLifetime = 1f;
 
+    [Header("Dynamic Hazard Control")]
+    public int maxHazardsPerWave = 1;
+    private bool stopSpawning = false;
+
+    public void StopSpawning()
+    {
+        stopSpawning = true;
+    }
+
+
     private void Start()
     {
         StartCoroutine(SpawnHazardsLoop());
@@ -21,27 +31,39 @@ public class TimedHazardSpawner : MonoBehaviour
 
     IEnumerator SpawnHazardsLoop()
     {
-        while (true)
+        while (!stopSpawning)
         {
+            for (int i = 0; i < maxHazardsPerWave; i++)
+            {
+                Vector3Int spawnPos = GetValidSpawnTile();
+                if (spawnPos == Vector3Int.zero) continue;
+
+                Vector3 worldPos = tilemap.GetCellCenterWorld(spawnPos);
+
+                GameObject warning = Instantiate(warningIndicatorPrefab, worldPos, Quaternion.identity);
+                StartCoroutine(FlashWarning(warning.GetComponent<SpriteRenderer>(), warningDuration));
+
+                StartCoroutine(SpawnHazardAfterDelay(worldPos, warningDuration, warning));
+            }
+
             yield return new WaitForSeconds(spawnInterval);
-
-            Vector3Int spawnPos = GetValidSpawnTile();
-            if (spawnPos == Vector3Int.zero) continue;
-
-            Vector3 worldPos = tilemap.GetCellCenterWorld(spawnPos);
-
-            GameObject warning = Instantiate(warningIndicatorPrefab, worldPos, Quaternion.identity);
-            StartCoroutine(FlashWarning(warning.GetComponent<SpriteRenderer>(), warningDuration));
-
-            yield return new WaitForSeconds(warningDuration);
-
-            Destroy(warning);
-
-            GameObject hazard = Instantiate(timedHazardPrefab, worldPos, Quaternion.identity);
-            yield return new WaitForSeconds(hazardLifetime);
-            Destroy(hazard);
         }
     }
+
+    IEnumerator SpawnHazardAfterDelay(Vector3 worldPos, float delay, GameObject warning)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (warning != null)
+        {
+            Destroy(warning);
+        }
+
+        GameObject hazard = Instantiate(timedHazardPrefab, worldPos, Quaternion.identity);
+        Destroy(hazard, hazardLifetime);
+    }
+
+
 
     Vector3Int GetValidSpawnTile()
     {
@@ -85,4 +107,6 @@ public class TimedHazardSpawner : MonoBehaviour
         }
         sprite.enabled = true;
     }
+
+
 }
