@@ -1,6 +1,5 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Security;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -18,30 +17,31 @@ public class NPCTracker : MonoBehaviour
     public float delayBeforeActiveNPCRemoval = 3f;
 
     [Header("Cleanup Visual Effects")]
-    public Image fadeImage; // Assign a full-screen UI Image in Canvas
+    public Image fadeImage;
     public float fadeDuration = 1f;
+    public float holdBlackScreenDuration = 1f; // NEW: Black screen duration
     public float floatSpeed = 2f;
 
-    private bool spawningAllowed = true;
-    private bool cleanupInProgress = false;
-
-    //for the bonus points
     public bool fusioned;
-    //Audio
+    public bool cleanupInProgress = false;
+    private bool spawningAllowed = true;
+
     public AudioControllingforSFX audioEvent;
-    
-    public List<GameObject> NPCPrefabs = new List<GameObject>(); //5
 
-    
+    public List<GameObject> NPCPrefabs = new List<GameObject>();
+    public Material whiteSilhouetteMaterial;
 
-    void Start()
+    private int fusionCount = 0;
+    public Sprite newPlayerSprite;
+
+    private void Start()
     {
         fusioned = false;
         audioEvent = GetComponent<AudioControllingforSFX>();
         StartCoroutine(SpawnNPCsRandomly());
     }
 
-    void Update()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.T))
         {
@@ -68,7 +68,7 @@ public class NPCTracker : MonoBehaviour
             if (spawnPos != Vector3Int.zero)
             {
                 Vector3 worldPos = tilemap.GetCellCenterWorld(spawnPos);
-                Instantiate(NPCPrefabs[Random.Range(0,4)], worldPos, Quaternion.identity);
+                Instantiate(NPCPrefabs[Random.Range(0, 4)], worldPos, Quaternion.identity);
             }
         }
     }
@@ -210,16 +210,33 @@ public class NPCTracker : MonoBehaviour
         Vector3 playerCenter = player.transform.position;
 
         HumanNPC[] npcs = FindObjectsOfType<HumanNPC>();
-        SpriteRenderer[] npcSprites = new SpriteRenderer[npcs.Length];
-        for (int i = 0; i < npcs.Length; i++)
+        Dictionary<SpriteRenderer, Material> originalMaterials = new Dictionary<SpriteRenderer, Material>();
+
+        foreach (HumanNPC npc in npcs)
         {
-            npcs[i].enabled = false;
-            npcSprites[i] = npcs[i].GetComponentInChildren<SpriteRenderer>();
+            npc.enabled = false;
+            if (npc.isActive)
+            {
+                foreach (SpriteRenderer sr in npc.GetComponentsInChildren<SpriteRenderer>())
+                {
+                    if (sr != null && !originalMaterials.ContainsKey(sr))
+                    {
+                        originalMaterials[sr] = sr.material;
+                        sr.material = whiteSilhouetteMaterial;
+                    }
+                }
+            }
         }
 
         player.enabled = false;
-        SpriteRenderer playerSprite = player.GetComponentInChildren<SpriteRenderer>();
-        Material originalMat = playerSprite.material;
+        foreach (SpriteRenderer sr in player.GetComponentsInChildren<SpriteRenderer>())
+        {
+            if (sr != null && !originalMaterials.ContainsKey(sr))
+            {
+                originalMaterials[sr] = sr.material;
+                sr.material = whiteSilhouetteMaterial;
+            }
+        }
 
         StartCoroutine(FadeImage(true));
 
@@ -227,7 +244,6 @@ public class NPCTracker : MonoBehaviour
         {
             if (npc.isActive)
             {
-                SpriteRenderer sr = npc.GetComponentInChildren<SpriteRenderer>();
                 StartCoroutine(MoveToPosition(npc.transform, playerCenter));
             }
         }
@@ -240,21 +256,31 @@ public class NPCTracker : MonoBehaviour
 
         yield return new WaitForSeconds(delayBeforeActiveNPCRemoval);
 
+        yield return new WaitForSeconds(holdBlackScreenDuration); // NEW: Hold black screen duration
+
         foreach (HumanNPC npc in FindObjectsOfType<HumanNPC>())
         {
             Destroy(npc.gameObject);
         }
 
-        yield return new WaitForSeconds(0.2f);
+        foreach (var kvp in originalMaterials)
+        {
+            if (kvp.Key != null)
+                kvp.Key.material = kvp.Value;
+        }
 
         player.enabled = true;
-        playerSprite.color = Color.white;
 
         StartCoroutine(FadeImage(false));
-
         cleanupInProgress = false;
         spawningAllowed = true;
         audioEvent.RestoreAll();
+
+        fusionCount++;
+        if (fusionCount >= 2)
+        {
+            player.UpgradePlayerVisuals(); // Switch player visuals after 2nd fusion
+        }
     }
 
     IEnumerator FadeImage(bool fadeIn)
@@ -287,6 +313,4 @@ public class NPCTracker : MonoBehaviour
             yield return null;
         }
     }
-
-
 }
