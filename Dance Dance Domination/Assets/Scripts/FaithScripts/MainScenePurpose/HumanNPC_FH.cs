@@ -80,7 +80,7 @@ public class HumanNPC_FH : MonoBehaviour
         {
             if (npc != this && npc.IsActive() && npc.GetCurrentGridPosition() == nextPosition)
             {
-                npcInNextTile = npc;
+                //npcInNextTile = npc;
                 break;
             }
         }
