@@ -7,6 +7,8 @@ public class TimedHazardSpawner : MonoBehaviour
 {
     public GameObject warningIndicatorPrefab;
     public GameObject timedHazardPrefab;
+    public GameObject hazardDropperPrefab; // NEW: Falling visual
+
     public Tilemap tilemap;
     public TilemapDataAssigner tileDataAssigner;
 
@@ -43,27 +45,43 @@ public class TimedHazardSpawner : MonoBehaviour
 
                 Vector3 worldPos = tilemap.GetCellCenterWorld(spawnPos);
 
+                // Spawn the warning indicator
                 GameObject warning = Instantiate(warningIndicatorPrefab, worldPos, Quaternion.identity);
+
                 HazardIndicatorBlinker blinker = warning.GetComponent<HazardIndicatorBlinker>();
                 if (blinker != null)
                 {
                     blinker.InitializeBlink(warningDuration, audioSource, warningBeep);
                 }
 
-                StartCoroutine(SpawnHazardAfterDelay(worldPos, warningDuration, warning));
+                // Wait for warning duration, then do the fast drop and spawn hazard
+                StartCoroutine(HandleDropAndSpawn(worldPos, warning));
             }
 
             yield return new WaitForSeconds(spawnInterval);
         }
     }
 
-    IEnumerator SpawnHazardAfterDelay(Vector3 worldPos, float delay, GameObject warning)
+    IEnumerator HandleDropAndSpawn(Vector3 worldPos, GameObject warning)
     {
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(warningDuration);
 
         if (warning != null)
-        {
             Destroy(warning);
+
+        // Fast drop effect right before hazard appears
+        if (hazardDropperPrefab != null)
+        {
+            Vector3 startPos = worldPos + new Vector3(0, 3f, 0);
+            GameObject dropper = Instantiate(hazardDropperPrefab, startPos, Quaternion.identity);
+            HazardDropperEffect effect = dropper.GetComponent<HazardDropperEffect>();
+
+            if (effect != null)
+            {
+                float dropDuration = 0.2f;
+                effect.Initialize(startPos, worldPos, dropDuration, hazardLifetime);
+                yield return new WaitForSeconds(dropDuration);
+            }
         }
 
         GameObject hazard = Instantiate(timedHazardPrefab, worldPos, Quaternion.identity);
