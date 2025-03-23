@@ -63,7 +63,7 @@ public class TempoBarManager : MonoBehaviour
         }
         if (isOutforLong() && Time.time - lastNPCKillTime >= secondsPlayerWasOut)
         {
-            HumanNPC_FH.RemoveLastNPC();
+            HumanNPC.RemoveLastNPC();
             lastNPCKillTime = Time.time; 
         }
     }
