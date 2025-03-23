@@ -9,10 +9,12 @@ public class PlayerMovement : MonoBehaviour
     public TilemapDataAssigner tileDataAssigner;
     public List<int> walkableTileIDs;
     public float moveSpeed = 5f;
+    public float holdDelay = 0.15f;
 
     private Vector3Int currentGridPosition;
     private Vector3Int targetGridPosition;
     private bool isMoving;
+    private float inputCooldown;
 
     void Start()
     {
@@ -25,7 +27,11 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isMoving)
         {
-            HandleInput();
+            inputCooldown -= Time.deltaTime;
+            if (inputCooldown <= 0f)
+            {
+                HandleInput();
+            }
         }
 
         MovePlayer();
@@ -34,18 +40,16 @@ public class PlayerMovement : MonoBehaviour
     void HandleInput()
     {
         Vector3Int direction = Vector3Int.zero;
-        if (Input.GetKeyDown(KeyCode.W)) direction = Vector3Int.up;
-        else if (Input.GetKeyDown(KeyCode.S)) direction = Vector3Int.down;
-        else if (Input.GetKeyDown(KeyCode.A)) direction = Vector3Int.left;
-        else if (Input.GetKeyDown(KeyCode.D)) direction = Vector3Int.right;
+        if (Input.GetKey(KeyCode.W)) direction = Vector3Int.up;
+        else if (Input.GetKey(KeyCode.S)) direction = Vector3Int.down;
+        else if (Input.GetKey(KeyCode.A)) direction = Vector3Int.left;
+        else if (Input.GetKey(KeyCode.D)) direction = Vector3Int.right;
 
         if (direction != Vector3Int.zero)
         {
             Vector3Int potentialPosition = currentGridPosition + direction;
 
-            // Try to activate NPCs in front of player
-            HumanNPC[] npcs = FindObjectsOfType<HumanNPC>();
-            foreach (HumanNPC npc in npcs)
+            foreach (HumanNPC npc in FindObjectsOfType<HumanNPC>())
             {
                 if (npc.GetCurrentGridPosition() == potentialPosition)
                 {
@@ -53,17 +57,16 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
 
-            // Check if player can move
-            bool playerCanMove = CanMoveTo(potentialPosition);
+            bool playerCanMove = CanMoveTo(potentialPosition) && !IsChainBlocked(potentialPosition, direction);
 
             if (playerCanMove)
             {
                 isMoving = true;
                 targetGridPosition = potentialPosition;
+                inputCooldown = holdDelay;
             }
 
-            // Regardless of player success, allow NPCs to try to move
-            foreach (HumanNPC npc in npcs)
+            foreach (HumanNPC npc in FindObjectsOfType<HumanNPC>())
             {
                 if (npc.IsActive() && !npc.IsMoving())
                 {
@@ -121,8 +124,6 @@ public class PlayerMovement : MonoBehaviour
             if (npc.IsActive() && npc.GetCurrentGridPosition() == position)
             {
                 Vector3Int nextPos = position + direction;
-
-                // NPC must be able to move forward, and the rest of the chain must too
                 if (!npc.CanMoveTo(nextPos) || IsChainBlocked(nextPos, direction))
                 {
                     return true;
@@ -130,7 +131,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        return !IsTileWalkable(position);
+        return false;
     }
 
     void CenterOnTile(Vector3Int gridPos)
@@ -139,23 +140,8 @@ public class PlayerMovement : MonoBehaviour
         transform.position = center;
     }
 
-    public Vector3Int GetCurrentGridPosition()
-    {
-        return currentGridPosition;
-    }
-
-    public Vector3Int GetTargetGridPosition()
-    {
-        return targetGridPosition;
-    }
-
-    public bool IsMoving()
-    {
-        return isMoving;
-    }
-
-    public bool WillBlockTile(Vector3Int targetPos)
-    {
-        return !IsTileWalkable(targetPos);
-    }
+    public Vector3Int GetCurrentGridPosition() => currentGridPosition;
+    public Vector3Int GetTargetGridPosition() => targetGridPosition;
+    public bool IsMoving() => isMoving;
+    public bool WillBlockTile(Vector3Int targetPos) => !IsTileWalkable(targetPos);
 }
