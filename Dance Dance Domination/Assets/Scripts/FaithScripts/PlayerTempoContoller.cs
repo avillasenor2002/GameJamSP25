@@ -6,7 +6,7 @@ public class PlayerTempoContoller : MonoBehaviour
 {
     public TempoBarManager TempoBarManager;
 
-    public Transform targetZone;
+    public TempoZone tempoZone;
     public AudioSource AudioSource;
 
     public float bpm;
@@ -22,9 +22,15 @@ public class PlayerTempoContoller : MonoBehaviour
     private ScreenShake negativeVisFeedback;
     public GameObject negativeVisSprite;
 
+    public GameObject gray;
+
+
 
     private void Start()
     {
+        tempoZone = GetComponentInChildren<TempoZone>();
+        
+
         bpm = 130f;
         secondsPerBeat = 60f / bpm;
         nextChangeTime = Time.time + changePitchInterval;
@@ -34,7 +40,6 @@ public class PlayerTempoContoller : MonoBehaviour
 
     private void Update()
     {
-
         if (Time.time >= nextChangeTime)
         {
             ChangeTempoAndTarget(); 
@@ -51,17 +56,17 @@ public class PlayerTempoContoller : MonoBehaviour
 
     IEnumerator SmoothMoveTarget(Vector3 newTargetPos, float duration)
     {
-        Vector3 startPos = targetZone.position;
+        Vector3 startPos = tempoZone.transform.position;
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)
         {
-            targetZone.position = Vector3.Lerp(startPos, newTargetPos, elapsedTime / duration);
+            tempoZone.transform.position = Vector3.Lerp(startPos, newTargetPos, elapsedTime / duration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        targetZone.position = newTargetPos;
+        tempoZone.transform.position = newTargetPos;
     }
 
     void ChangeTempoAndTarget()
@@ -71,10 +76,19 @@ public class PlayerTempoContoller : MonoBehaviour
         AudioSource.pitch = bpm / 120f;
         UpdateBeatTiming();
 
-        Vector3 newTargetPos = new Vector3(Random.Range(-2f, 2f), targetZone.position.y, targetZone.position.z);
-        StartCoroutine(SmoothMoveTarget(newTargetPos, 0.5f));
+        BoxCollider2D grayCollider = gray.GetComponent<BoxCollider2D>();
+        Bounds bounds = grayCollider.bounds;
 
-    }
+        float grayMinX = bounds.min.x;
+        float grayMaxX = bounds.max.x;
+
+        float newX = Random.Range(grayMinX, grayMaxX);
+
+        Vector3 newTargetPos = new Vector3(newX, tempoZone.transform.position.y, tempoZone.transform.position.z);
+        tempoZone.transform.position = newTargetPos;
+
+        StartCoroutine(SmoothMoveTarget(newTargetPos, 0.5f));
+     }
 
 
     bool CheckHitTiming()
@@ -83,7 +97,6 @@ public class PlayerTempoContoller : MonoBehaviour
         float songTime = AudioSource.time;
         float nearestBeatTime = Mathf.Floor(songTime / secondsPerBeat) * secondsPerBeat;
         float difference = Mathf.Abs(songTime - nearestBeatTime);
-
 
         if (difference <= beatThreshold)
         {

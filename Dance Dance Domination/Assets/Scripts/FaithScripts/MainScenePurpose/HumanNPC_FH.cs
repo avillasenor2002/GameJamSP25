@@ -6,7 +6,13 @@ using UnityEngine.Tilemaps;
 public class HumanNPC_FH : MonoBehaviour
 {
     public Tilemap tilemap;
-    public TilemapDataAssigner tileDataAssigner;
+    public TilemapDataAssigner_FH tileDataAssigner;
+
+    public TempoBarManager tempoBarManager;
+
+
+    public static List<HumanNPC_FH> activeNPCs;
+
     public List<int> walkableTileIDs;
     public float moveSpeed = 5f;
     public bool isActive = false;
@@ -17,6 +23,9 @@ public class HumanNPC_FH : MonoBehaviour
 
     void Start()
     {
+        activeNPCs = new List<HumanNPC_FH>();
+        tempoBarManager = FindObjectOfType<TempoBarManager>();
+
         // Find Tilemap if not assigned
         if (tilemap == null)
         {
@@ -31,7 +40,7 @@ public class HumanNPC_FH : MonoBehaviour
         // Find TileDataAssigner if not assigned
         if (tileDataAssigner == null)
         {
-            tileDataAssigner = FindObjectOfType<TilemapDataAssigner>();
+            tileDataAssigner = FindObjectOfType<TilemapDataAssigner_FH>();
             if (tileDataAssigner == null)
             {
                 Debug.LogError("HumanNPC: TilemapDataAssigner not found in the scene!");
@@ -50,23 +59,49 @@ public class HumanNPC_FH : MonoBehaviour
         {
             MoveObject();
         }
+
+        if (tempoBarManager.isOutforLong())
+        {
+            // RemoveLastNPC();
+        }
+
     }
+
 
     public void ActivateObject()
     {
         if (!isActive)
         {
             isActive = true;
+            activeNPCs.Add(this);
+            Debug.Log(activeNPCs.Count);
             Debug.Log($"{gameObject.name} has been activated!");
         }
     }
+
+    public static void RemoveLastNPC()
+    {
+        if(activeNPCs.Count > 0 || activeNPCs == null)
+        {
+            Debug.LogError("ActiveNPCs is empty");
+            return;
+        }
+
+        HumanNPC_FH lastNPC = activeNPCs[activeNPCs.Count - 1];
+        activeNPCs.Remove(lastNPC);
+        Destroy(lastNPC.gameObject);
+        Debug.Log($"{lastNPC.gameObject.name} has been removed");    
+    
+    }
+
+
 
     public void TryFollowMove(Vector3Int direction)
     {
         Vector3Int nextPosition = currentGridPosition + direction;
 
         // Attempt to activate any inactive NPCs in the next tile
-        foreach (HumanNPC_FH npc in FindObjectsOfType<HumanNPC_FH>())
+        foreach (HumanNPC_FH npc in activeNPCs)
         {
             if (!npc.IsActive() && npc.GetCurrentGridPosition() == nextPosition)
             {
@@ -75,8 +110,8 @@ public class HumanNPC_FH : MonoBehaviour
         }
 
         // Check if there's an NPC in the next tile that can't move in the same direction
-        HumanNPC npcInNextTile = null;
-        foreach (HumanNPC_FH npc in FindObjectsOfType<HumanNPC_FH>())
+        HumanNPC_FH npcInNextTile = null;
+        foreach (HumanNPC_FH npc in activeNPCs)
         {
             if (npc != this && npc.IsActive() && npc.GetCurrentGridPosition() == nextPosition)
             {
@@ -97,7 +132,7 @@ public class HumanNPC_FH : MonoBehaviour
             targetGridPosition = nextPosition;
 
             // Continue group propagation
-            foreach (HumanNPC_FH npc in FindObjectsOfType<HumanNPC_FH>())
+            foreach (HumanNPC_FH npc in activeNPCs)
             {
                 if (npc != this && npc.IsActive() && !npc.IsMoving())
                 {
@@ -137,7 +172,7 @@ public class HumanNPC_FH : MonoBehaviour
         }
 
         // Block if trying to move into the player’s position
-        PlayerMovement player = FindObjectOfType<PlayerMovement>();
+        PlayerMovement_FH player = FindObjectOfType<PlayerMovement_FH>();
         if (player != null)
         {
             Vector3Int playerCurrent = player.GetCurrentGridPosition();
