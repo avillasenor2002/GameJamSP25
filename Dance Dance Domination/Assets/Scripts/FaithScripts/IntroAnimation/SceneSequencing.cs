@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class SceneSequencing : MonoBehaviour
 {
     public static SceneSequencing instance;
+    public GameObject planeObject;
 
     private void Awake()
     {
@@ -17,6 +18,11 @@ public class SceneSequencing : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public void OnPressLoadTitleScene()
+    {
+        SceneManager.LoadScene("TitleScreen");
     }
 
     //From Title Scene to main game
@@ -31,4 +37,12 @@ public class SceneSequencing : MonoBehaviour
     {
         SceneManager.LoadScene("EndScene");
     }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
+
+
 }
