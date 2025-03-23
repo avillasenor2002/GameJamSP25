@@ -19,7 +19,7 @@ public class PlayerTempoContoller : MonoBehaviour
     public float minBPM = 80f;
     public float maxBPM = 160f;
 
-    private ScreenShake negativeVisFeedback;
+    private TempoBarShake negativeVisFeedback;
     public GameObject negativeVisSprite;
 
     public GameObject gray;
@@ -29,12 +29,11 @@ public class PlayerTempoContoller : MonoBehaviour
     private void Start()
     {
         tempoZone = GetComponentInChildren<TempoZone>();
-        
 
         bpm = 130f;
         secondsPerBeat = 60f / bpm;
         nextChangeTime = Time.time + changePitchInterval;
-        negativeVisFeedback = GetComponent<ScreenShake>();
+        negativeVisFeedback = GetComponentInParent<TempoBarShake>();
         negativeVisSprite.SetActive(false);
     }
 

@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class ScreenShake : MonoBehaviour
+public class TempoBarShake : MonoBehaviour
 {
     private Vector3 originalPosition;
 
@@ -9,7 +9,7 @@ public class ScreenShake : MonoBehaviour
     [SerializeField] private float shakeDuration = 0.5f;
     void Start()
     {
-        originalPosition = transform.position;    
+        originalPosition = transform.localPosition;    
     }
 
     public void ShakeCamera()
@@ -20,7 +20,6 @@ public class ScreenShake : MonoBehaviour
     private IEnumerator ShakeCoroutine()
     {
         float elapsed = 0f;
-        Vector3 originalCameraPosition = transform.position;
 
         while (elapsed < shakeDuration)
         {
@@ -28,13 +27,13 @@ public class ScreenShake : MonoBehaviour
             float y = Random.Range(-shakeIntensity, shakeIntensity);
 
             // Apply shake to the camera position
-            transform.position = originalCameraPosition + new Vector3(x, y, 0);
+            transform.localPosition = originalPosition + new Vector3(x, y, 0);
 
             elapsed += Time.deltaTime;
             yield return null;
         }
 
         // Reset camera position after shaking
-        transform.position = originalCameraPosition;
+        transform.localPosition = originalPosition;
     }
 }

@@ -26,12 +26,14 @@ public class TempoBarManager : MonoBehaviour
     public GameObject gray;
     private float lastNPCKillTime = 0f;
 
+    Bounds bounds;
+
     private void Start()
     {
+        BoxCollider2D grayCollider = gray.GetComponent<BoxCollider2D>();
+        bounds = grayCollider.bounds;
  
         lastInputTime = Time.time;
-        BoxCollider2D grayCollider = gray.GetComponent<BoxCollider2D>();
-        Bounds bounds = grayCollider.bounds;
 
         minX = bounds.min.x;
         maxX = bounds.max.x;
@@ -71,7 +73,10 @@ public class TempoBarManager : MonoBehaviour
     {
         transform.position += new Vector3(velocity * Time.deltaTime, 0, 0);
 
-        float clampedX = Mathf.Clamp(transform.position.x, minX, maxX);
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+
+        float boxCenter = sr.bounds.extents.x;
+        float clampedX = Mathf.Clamp(transform.position.x, minX + boxCenter, maxX - boxCenter);
         transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
 
         velocity = Mathf.Lerp(velocity, 0, Time.deltaTime * 1.5f);
