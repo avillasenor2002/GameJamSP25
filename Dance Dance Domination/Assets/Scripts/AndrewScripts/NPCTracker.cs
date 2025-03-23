@@ -27,11 +27,17 @@ public class NPCTracker : MonoBehaviour
 
     //for the bonus points
     public bool fusioned;
+    //Audio
+    public AudioControllingforSFX audioEvent;
+    
+    public List<GameObject> NPCPrefabs = new List<GameObject>(); //5
 
+    
 
     void Start()
     {
         fusioned = false;
+        audioEvent = GetComponent<AudioControllingforSFX>();
         StartCoroutine(SpawnNPCsRandomly());
     }
 
@@ -62,7 +68,7 @@ public class NPCTracker : MonoBehaviour
             if (spawnPos != Vector3Int.zero)
             {
                 Vector3 worldPos = tilemap.GetCellCenterWorld(spawnPos);
-                Instantiate(npcPrefab, worldPos, Quaternion.identity);
+                Instantiate(NPCPrefabs[Random.Range(0,4)], worldPos, Quaternion.identity);
             }
         }
     }
@@ -196,6 +202,7 @@ public class NPCTracker : MonoBehaviour
 
     IEnumerator CleanupAndDisableMovement()
     {
+        audioEvent.MuteAllExceptFusion();
         cleanupInProgress = true;
         spawningAllowed = false;
 
@@ -212,16 +219,17 @@ public class NPCTracker : MonoBehaviour
 
         player.enabled = false;
         SpriteRenderer playerSprite = player.GetComponentInChildren<SpriteRenderer>();
+        Material originalMat = playerSprite.material;
 
         StartCoroutine(FadeImage(true));
-        playerSprite.color = Color.white;
+
+        playerSprite.material = whiteMaterial;
 
         foreach (var npc in npcs)
         {
             if (npc.isActive)
             {
                 SpriteRenderer sr = npc.GetComponentInChildren<SpriteRenderer>();
-                sr.color = Color.white;
                 StartCoroutine(MoveToPosition(npc.transform, playerCenter));
             }
         }
@@ -248,6 +256,7 @@ public class NPCTracker : MonoBehaviour
 
         cleanupInProgress = false;
         spawningAllowed = true;
+        audioEvent.RestoreAll();
     }
 
     IEnumerator FadeImage(bool fadeIn)
