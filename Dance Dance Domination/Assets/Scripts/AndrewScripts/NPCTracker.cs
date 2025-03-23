@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -19,6 +19,7 @@ public class NPCTracker : MonoBehaviour
     [Header("Cleanup Visual Effects")]
     public Image fadeImage;
     public float fadeDuration = 1f;
+    public float holdBlackScreenDuration = 1f; // NEW: Black screen duration
     public float floatSpeed = 2f;
 
     public bool fusioned;
@@ -28,10 +29,10 @@ public class NPCTracker : MonoBehaviour
     public AudioControllingforSFX audioEvent;
 
     public List<GameObject> NPCPrefabs = new List<GameObject>();
-    public Material whiteSilhouetteMaterial; // Material assigned in inspector
+    public Material whiteSilhouetteMaterial;
 
     private int fusionCount = 0;
-    public Sprite newPlayerSprite; // Assign in Inspector
+    public Sprite newPlayerSprite;
 
     private void Start()
     {
@@ -209,10 +210,8 @@ public class NPCTracker : MonoBehaviour
         Vector3 playerCenter = player.transform.position;
 
         HumanNPC[] npcs = FindObjectsOfType<HumanNPC>();
-
         Dictionary<SpriteRenderer, Material> originalMaterials = new Dictionary<SpriteRenderer, Material>();
 
-        // Active NPCs: replace material
         foreach (HumanNPC npc in npcs)
         {
             npc.enabled = false;
@@ -229,7 +228,6 @@ public class NPCTracker : MonoBehaviour
             }
         }
 
-        // Player: replace material
         player.enabled = false;
         foreach (SpriteRenderer sr in player.GetComponentsInChildren<SpriteRenderer>())
         {
@@ -258,14 +256,13 @@ public class NPCTracker : MonoBehaviour
 
         yield return new WaitForSeconds(delayBeforeActiveNPCRemoval);
 
+        yield return new WaitForSeconds(holdBlackScreenDuration); // NEW: Hold black screen duration
+
         foreach (HumanNPC npc in FindObjectsOfType<HumanNPC>())
         {
             Destroy(npc.gameObject);
         }
 
-        yield return new WaitForSeconds(0.2f);
-
-        // Restore player and NPC materials
         foreach (var kvp in originalMaterials)
         {
             if (kvp.Key != null)
@@ -279,11 +276,10 @@ public class NPCTracker : MonoBehaviour
         spawningAllowed = true;
         audioEvent.RestoreAll();
 
-        // Upgrade player visual after second fusion
         fusionCount++;
         if (fusionCount >= 2)
         {
-            player.UpgradePlayerVisuals(); // This function should handle new sprite logic
+            player.UpgradePlayerVisuals(); // Switch player visuals after 2nd fusion
         }
     }
 
