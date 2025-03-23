@@ -5,7 +5,6 @@ using TMPro;
 
 public class EntryEnter : MonoBehaviour
 {
-
     public TMP_InputField playerNameInput;
     public GameObject submitScoreButton;
 
@@ -28,7 +27,7 @@ public class EntryEnter : MonoBehaviour
 
         Ranking.NameAndScore updatedScore = new Ranking.NameAndScore
         {
-            //Score = Mathf.FloorToInt(GameManager.Instance.score),
+            Score = Mathf.FloorToInt(Scores.instance.currentScore),
             Name = playerName
         };
 

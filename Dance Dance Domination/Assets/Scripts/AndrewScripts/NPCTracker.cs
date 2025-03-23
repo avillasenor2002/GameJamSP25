@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -24,8 +25,13 @@ public class NPCTracker : MonoBehaviour
     private bool spawningAllowed = true;
     private bool cleanupInProgress = false;
 
+    //for the bonus points
+    public bool fusioned;
+
+
     void Start()
     {
+        fusioned = false;
         StartCoroutine(SpawnNPCsRandomly());
     }
 
@@ -38,6 +44,7 @@ public class NPCTracker : MonoBehaviour
 
         if (!cleanupInProgress && CountActiveNPCs() >= maxActiveNPCs)
         {
+            fusioned = true;
             StartCoroutine(CleanupAndDisableMovement());
         }
     }
@@ -177,7 +184,7 @@ public class NPCTracker : MonoBehaviour
         return Mathf.Clamp(count, 0, 4);
     }
 
-    int CountActiveNPCs()
+    public int CountActiveNPCs()
     {
         int count = 0;
         foreach (HumanNPC npc in FindObjectsOfType<HumanNPC>())

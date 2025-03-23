@@ -4024,6 +4024,7 @@ GameObject:
   - component: {fileID: 1419553769}
   - component: {fileID: 1419553770}
   - component: {fileID: 1419553771}
+  - component: {fileID: 1419553772}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -4087,6 +4088,7 @@ MonoBehaviour:
   fadeImage: {fileID: 1296629357}
   fadeDuration: 0.1
   floatSpeed: 3
+  fusioned: 0
 --- !u!114 &1419553770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4125,6 +4127,22 @@ MonoBehaviour:
   timerText: {fileID: 645285650}
   hazardSpawner: {fileID: 1419553770}
   updateInterval: 3
+--- !u!114 &1419553772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419553765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d420c9a7df4f8ec4b9e0cf513f20f8d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  npcTracker: {fileID: 1419553769}
+  totalScore: 0
+  currentScore: 0
+  fusionBonusScore: 0
 --- !u!1 &1452353415
 GameObject:
   m_ObjectHideFlags: 0
