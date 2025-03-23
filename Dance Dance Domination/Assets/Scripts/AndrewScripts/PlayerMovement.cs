@@ -16,6 +16,12 @@ public class PlayerMovement : MonoBehaviour
     private bool isMoving;
     private float inputCooldown;
 
+    [Header("Player Sprite Handling")]
+    public GameObject spriteObject; // Assign the current sprite object
+    public GameObject upgradedSpriteObject; // Assign upgraded version, should be disabled by default
+
+    private bool hasUpgraded = false;
+
     void Start()
     {
         currentGridPosition = tilemap.WorldToCell(transform.position);
@@ -144,4 +150,13 @@ public class PlayerMovement : MonoBehaviour
     public Vector3Int GetTargetGridPosition() => targetGridPosition;
     public bool IsMoving() => isMoving;
     public bool WillBlockTile(Vector3Int targetPos) => !IsTileWalkable(targetPos);
+
+    public void UpgradePlayerVisuals()
+    {
+        if (hasUpgraded) return;
+
+        hasUpgraded = true;
+        if (spriteObject != null) spriteObject.SetActive(false);
+        if (upgradedSpriteObject != null) upgradedSpriteObject.SetActive(true);
+    }
 }
