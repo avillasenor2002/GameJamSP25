@@ -43,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Vector3Int potentialPosition = currentGridPosition + direction;
 
-            // Attempt activation of NPCs in the path
+            // Try to activate NPCs in front of player
             HumanNPC[] npcs = FindObjectsOfType<HumanNPC>();
             foreach (HumanNPC npc in npcs)
             {
@@ -53,17 +53,21 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
 
-            if (CanMoveTo(potentialPosition))
+            // Check if player can move
+            bool playerCanMove = CanMoveTo(potentialPosition);
+
+            if (playerCanMove)
             {
                 isMoving = true;
                 targetGridPosition = potentialPosition;
+            }
 
-                foreach (HumanNPC npc in npcs)
+            // Regardless of player success, allow NPCs to try to move
+            foreach (HumanNPC npc in npcs)
+            {
+                if (npc.IsActive() && !npc.IsMoving())
                 {
-                    if (npc.IsActive() && !npc.IsMoving())
-                    {
-                        npc.TryFollowMove(direction);
-                    }
+                    npc.TryFollowMove(direction);
                 }
             }
         }
@@ -108,6 +112,25 @@ public class PlayerMovement : MonoBehaviour
         }
 
         return true;
+    }
+
+    private bool IsChainBlocked(Vector3Int position, Vector3Int direction)
+    {
+        foreach (HumanNPC npc in FindObjectsOfType<HumanNPC>())
+        {
+            if (npc.IsActive() && npc.GetCurrentGridPosition() == position)
+            {
+                Vector3Int nextPos = position + direction;
+
+                // NPC must be able to move forward, and the rest of the chain must too
+                if (!npc.CanMoveTo(nextPos) || IsChainBlocked(nextPos, direction))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return !IsTileWalkable(position);
     }
 
     void CenterOnTile(Vector3Int gridPos)
