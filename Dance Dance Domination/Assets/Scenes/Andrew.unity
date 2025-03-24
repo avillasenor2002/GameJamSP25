@@ -3934,6 +3934,7 @@ MonoBehaviour:
   npcTracker: {fileID: 1419553769}
   currentScore: 0
   fusionBonusScore: 0
+  scoreUI: {fileID: 1646263402}
 --- !u!114 &1419553773
 MonoBehaviour:
   m_ObjectHideFlags: 0

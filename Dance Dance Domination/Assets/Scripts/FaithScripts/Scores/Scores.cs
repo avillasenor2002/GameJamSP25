@@ -15,7 +15,7 @@ public class Scores : MonoBehaviour
     public int fusionBonusScore;
     private int lastNPCCount = 0;
 
-    //public TextMeshProUGUI scoreUI; //If anyone needs this
+    public TextMeshProUGUI scoreUI;
 
 
     private void Awake()
@@ -38,7 +38,8 @@ public class Scores : MonoBehaviour
 
     private void Update()
     {
-        
+        scoreUI.text = "Score: "+ currentScore;
+
         int currentNPCCount = npcTracker.CountActiveNPCs();
         int newlyAdded = currentNPCCount - lastNPCCount;
 
