@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -34,6 +35,15 @@ public class NPCTracker : MonoBehaviour
     private int fusionCount = 0;
     public Sprite newPlayerSprite;
 
+    [Header("UI Progress")]
+    public Image groupProgressBar;
+    public TextMeshProUGUI groupCountText;
+
+    [Tooltip("How fast the fill bar updates (higher is snappier)")]
+    public float fillLerpSpeed = 5f;
+
+    private float currentFillAmount = 0f;
+
     private void Start()
     {
         fusioned = false;
@@ -53,6 +63,8 @@ public class NPCTracker : MonoBehaviour
             fusioned = true;
             StartCoroutine(CleanupAndDisableMovement());
         }
+
+        UpdateGroupProgressUI();
     }
 
     IEnumerator SpawnNPCsRandomly()
@@ -313,4 +325,21 @@ public class NPCTracker : MonoBehaviour
             yield return null;
         }
     }
+
+    private void UpdateGroupProgressUI()
+    {
+        if (groupProgressBar == null || groupCountText == null) return;
+
+        int current = CountActiveNPCs();
+        int max = maxActiveNPCs;
+
+        // Smooth Lerp for bar fill
+        float targetFill = Mathf.Clamp01((float)current / max);
+        currentFillAmount = Mathf.Lerp(currentFillAmount, targetFill, Time.deltaTime * fillLerpSpeed);
+        groupProgressBar.fillAmount = currentFillAmount;
+
+        // Update text
+        groupCountText.text = $"{current}/{max}";
+    }
+
 }
