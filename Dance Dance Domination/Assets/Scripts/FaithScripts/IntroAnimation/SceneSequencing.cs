@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class SceneSequencing : MonoBehaviour
 {
     public static SceneSequencing instance;
+    public GameObject tutorialScreen;
 
     private void Awake()
     {
@@ -40,6 +41,16 @@ public class SceneSequencing : MonoBehaviour
     public void ExitGame()
     {
         Application.Quit();
+    }
+
+    public void Tutorial()
+    {
+        tutorialScreen.SetActive(true);
+    }
+
+    public void ExitTutorial()
+    {
+        tutorialScreen.SetActive(false);
     }
 
 

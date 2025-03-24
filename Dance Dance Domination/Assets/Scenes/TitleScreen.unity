@@ -312,8 +312,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Move around the dance floor, build a group, press space to the rythim to
-    maintain it
+  m_text: Move into people at the club to grow your group while maintaining rhythm!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1714,7 +1713,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Press to the Rythum '
+  m_text: 'Press to the Rhythm '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1825,7 +1824,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 651.35, y: 46.408}
+  m_AnchoredPosition: {x: 615, y: 9}
   m_SizeDelta: {x: 602.01, y: 92.816}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1536396161
@@ -1850,8 +1849,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: '- Controls -'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a520ba0cc165a1e439f1e53522b311e0, type: 2}
+  m_sharedMaterial: {fileID: 4166079634522545955, guid: a520ba0cc165a1e439f1e53522b311e0, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

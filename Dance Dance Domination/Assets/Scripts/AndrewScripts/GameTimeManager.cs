@@ -11,6 +11,9 @@ public class GameTimerManager : MonoBehaviour
     public float updateInterval = 1f; // How often to update timer and hazard difficulty
 
     public float remainingTime;
+    public GameObject fadein;
+    //public float time;
+    
 
     void Start()
     {
@@ -52,7 +55,7 @@ public class GameTimerManager : MonoBehaviour
 
     void EndGame()
     {
-        timerText.text = "Time: 0\nGAME OVER";
+        timerText.text = "TIME'S UP";
         hazardSpawner.StopSpawning();
         StartCoroutine(slowsDownEnd());
 
@@ -61,7 +64,9 @@ public class GameTimerManager : MonoBehaviour
     IEnumerator slowsDownEnd()
     {
         //Some kind of visual indication like fade out
-        yield return new WaitForSeconds(3f);
+        fadein.SetActive(true);
+        
+        yield return new WaitForSeconds(5f);
         SceneSequencing.instance.EndSceneLoad();
     }
 
