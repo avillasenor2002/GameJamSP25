@@ -108,7 +108,7 @@ MonoBehaviour:
   spriteObject: {fileID: 6917963477567142562}
   fadeInDuration: 0.5
   flickerDuration: 0.5
-  ghostPrefab: {fileID: 2154413107942261841, guid: bfc28bd4a08abd746b655f82ec950df5, type: 3}
+  ghostPrefab: {fileID: 3621702298598309983}
   spawnParticles: {fileID: 2250993424995466299, guid: 588d0339cb1b999459213fee96f290aa, type: 3}
   activateParticles: {fileID: 2250993424995466299, guid: 087b97c40931b0642ade8b5363b631ce, type: 3}
   destroyParticles: {fileID: 2250993424995466299, guid: 588d0339cb1b999459213fee96f290aa, type: 3}

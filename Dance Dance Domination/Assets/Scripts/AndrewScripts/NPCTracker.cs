@@ -20,7 +20,7 @@ public class NPCTracker : MonoBehaviour
     [Header("Cleanup Visual Effects")]
     public Image fadeImage;
     public float fadeDuration = 1f;
-    public float holdBlackScreenDuration = 1f; // NEW: Black screen duration
+    public float holdBlackScreenDuration = 1f;
     public float floatSpeed = 2f;
 
     public bool fusioned;
@@ -31,18 +31,18 @@ public class NPCTracker : MonoBehaviour
 
     public List<GameObject> NPCPrefabs = new List<GameObject>();
     public Material whiteSilhouetteMaterial;
-
     private int fusionCount = 0;
     public Sprite newPlayerSprite;
 
     [Header("UI Progress")]
     public Image groupProgressBar;
     public TextMeshProUGUI groupCountText;
-
-    [Tooltip("How fast the fill bar updates (higher is snappier)")]
     public float fillLerpSpeed = 5f;
-
     private float currentFillAmount = 0f;
+
+    [Header("Timer")]
+    public GameTimerManager countdownTimer; // <-- Assign in inspector
+    public float timeAdd;
 
     private void Start()
     {
@@ -267,8 +267,7 @@ public class NPCTracker : MonoBehaviour
         }
 
         yield return new WaitForSeconds(delayBeforeActiveNPCRemoval);
-
-        yield return new WaitForSeconds(holdBlackScreenDuration); // NEW: Hold black screen duration
+        yield return new WaitForSeconds(holdBlackScreenDuration);
 
         foreach (HumanNPC npc in FindObjectsOfType<HumanNPC>())
         {
@@ -282,8 +281,8 @@ public class NPCTracker : MonoBehaviour
         }
 
         player.enabled = true;
-
         StartCoroutine(FadeImage(false));
+
         cleanupInProgress = false;
         spawningAllowed = true;
         audioEvent.RestoreAll();
@@ -291,7 +290,13 @@ public class NPCTracker : MonoBehaviour
         fusionCount++;
         if (fusionCount >= 2)
         {
-            player.UpgradePlayerVisuals(); // Switch player visuals after 2nd fusion
+            player.UpgradePlayerVisuals();
+        }
+
+        // ⏱ Add 20 seconds to timer
+        if (countdownTimer != null)
+        {
+            countdownTimer.remainingTime = countdownTimer.remainingTime + timeAdd;
         }
     }
 
@@ -331,15 +336,10 @@ public class NPCTracker : MonoBehaviour
         if (groupProgressBar == null || groupCountText == null) return;
 
         int current = CountActiveNPCs();
-        int max = maxActiveNPCs;
+        float targetFill = Mathf.Clamp01((float)current / maxActiveNPCs);
 
-        // Smooth Lerp for bar fill
-        float targetFill = Mathf.Clamp01((float)current / max);
         currentFillAmount = Mathf.Lerp(currentFillAmount, targetFill, Time.deltaTime * fillLerpSpeed);
         groupProgressBar.fillAmount = currentFillAmount;
-
-        // Update text
-        groupCountText.text = $"{current}/{max}";
+        groupCountText.text = $"{current}/{maxActiveNPCs}";
     }
-
 }

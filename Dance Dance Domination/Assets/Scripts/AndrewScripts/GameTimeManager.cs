@@ -10,7 +10,7 @@ public class GameTimerManager : MonoBehaviour
     public TimedHazardSpawner hazardSpawner; // Reference to the spawner
     public float updateInterval = 1f; // How often to update timer and hazard difficulty
 
-    private float remainingTime;
+    public float remainingTime;
 
     void Start()
     {
